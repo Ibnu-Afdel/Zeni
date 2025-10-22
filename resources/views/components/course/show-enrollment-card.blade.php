@@ -17,7 +17,7 @@
           <div class="flex flex-wrap gap-3 shrink-0">
               @auth
                   @if ($continueLearningLesson)
-                      <a href="{{ route('course-play', ['course' => $course->id, 'lesson' => $continueLearningLesson->id]) }}"
+                      <a href="{{ route('course-play', ['course' => $course, 'lesson' => $continueLearningLesson->id]) }}"
                           class="inline-flex items-center justify-center px-5 py-2 text-sm font-medium text-white transition duration-150 ease-in-out bg-green-600 border border-transparent rounded-md shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                           @if ($isNewEnrollment)
                               <i class="mr-2 fas fa-play"></i> Start Learning

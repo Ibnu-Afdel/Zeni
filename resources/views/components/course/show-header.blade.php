@@ -18,7 +18,7 @@
   </a>
 
   @if ($isInstructor)
-      <a href="{{ route('instructor.manage_content', $course->id) }}"
+      <a href="{{ route('instructor.manage_content', $course) }}"
           class="inline-flex items-center gap-1 text-sm font-medium text-indigo-600 transition duration-150 ease-in-out hover:text-indigo-800">
           <i class="fas fa-edit fa-fw"></i>
           Manage Content

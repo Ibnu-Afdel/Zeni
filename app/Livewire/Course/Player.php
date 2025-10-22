@@ -8,8 +8,9 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
-class CoursePlay extends Component
+class Player extends Component
 {
+
     public Course $course;
     public Collection $sections;
     public ?Lesson $currentLesson = null;
@@ -17,7 +18,7 @@ class CoursePlay extends Component
     public ?Lesson $previousLesson = null;
     public array $completedLessons = [];
 
-    public function mount(Course $course, Lesson $lesson)
+    public function mount(Course $course, ?Lesson $lesson = null)
     {
         $this->course = $course;
         $this->loadStructure();
@@ -77,7 +78,7 @@ class CoursePlay extends Component
             $this->calculateNavigation();
             $this->dispatch('player-reload');
 
-            return redirect()->route('course-play', [$this->course->id, $lesson->id]);
+            return redirect()->route('course-play', ['course' => $this->course, 'lesson' => $lesson->id]);
         }
     }
 
@@ -86,6 +87,16 @@ class CoursePlay extends Component
         Auth::user()->lessons()->syncWithoutDetaching([
             $this->currentLesson->id => ['completed_at' => now()],
         ]);
+        $this->loadCompletedLessons();
+    }
+
+    public function markAsIncomplete()
+    {
+        $relation = Auth::user()->lessons();
+        $updated = $relation->updateExistingPivot($this->currentLesson->id, ['completed_at' => null]);
+        if ($updated === 0) {
+            $relation->detach($this->currentLesson->id);
+        }
         $this->loadCompletedLessons();
     }
 
@@ -107,8 +118,9 @@ class CoursePlay extends Component
     {
         $comments = $this->currentLesson?->comments()->with('user')->get() ?? collect();
 
-        return view('livewire.course.course-play', [
+        return view('livewire.course.player', [
             'comments' => $comments,
         ]);
     }
+
 }

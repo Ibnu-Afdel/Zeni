@@ -2,13 +2,11 @@
 
 use App\Http\Controllers\Auth\OAuthController;
 use App\Http\Controllers\ChapaController;
-use App\Livewire\Course\CoursePlay;
 use App\Livewire\HomePage;
 use App\Livewire\Subscriptions\ManualPayment;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Admin\ManageCourses;
 use App\Livewire\Admin\ManageUsers;
-use App\Livewire\Course\CourseDetail;
 use App\Livewire\Instructor\CourseManagement;
 use App\Livewire\User\Profile;
 use App\Livewire\User\Follow;
@@ -24,6 +22,7 @@ use App\Livewire\Admin\ManageSubscriptions;
 use App\Livewire\Course\Create;
 use App\Livewire\Course\Edit;
 use App\Livewire\Course\Index;
+use App\Livewire\Course\Player;
 use App\Livewire\Course\Show;
 use App\Livewire\Instructor\ManageContent;
 use Illuminate\Support\Facades\Auth;
@@ -64,7 +63,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile/{username}', Profile::class)->name('user.profile');
     Route::get('/follow/{user}', Follow::class)->name('user.follow');
     Route::get('/chat/{course}', Chat::class)->name('user.chat');
-    Route::get('/courses/{course}/learn/{lesson?}', CoursePlay::class)->name('course-play');
+    Route::get('/courses/{course}/learn/{lesson?}', Player::class)->name('course-play');
     Route::get('/courses/{course}/chat', Chat::class)->name('course-chat');
     Route::get('/subscribe/manual', ManualPayment::class)->name('subscribe.manual');
     Route::get('/instructor/apply', InstructorApplicationForm::class)->name('instructor.apply');
