@@ -23,7 +23,7 @@
                     <span>Price: <span class="font-medium">{{ $course->price }}</span></span>
                 </div>
                 <div class="flex items-center gap-2 mt-4">
-                    <a href="{{ route('courses.edit', ['course' => $course]) }}" class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-50">
+                    <a href="{{ route('instructor.courses.edit', ['course' => $course]) }}" class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-50">
                         <i class="mr-2 fas fa-edit"></i>
                         Edit
                     </a>
