@@ -5,10 +5,10 @@ namespace App\Livewire\Instructor\Course;
 use App\Models\Course;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Illuminate\View\View;
 
 class Index extends Component
 {
-    public $courses = [];
     public ?string $filterStatus = null; // draft|published|archived|null
     public ?string $filterLevel = null; // beginner|intermediate|advanced|null
     public ?bool $filterPro = null; // true|false|null
@@ -20,38 +20,19 @@ class Index extends Component
         if (!$user || $user->role !== 'instructor') {
             abort(403, 'Unauthorized action.');
         }
-        $this->loadCourses();
     }
 
-    public function updatedFilterStatus(): void { $this->loadCourses(); }
-    public function updatedFilterLevel(): void { $this->loadCourses(); }
-    public function updatedFilterPro(): void { $this->loadCourses(); }
-
-    protected function loadCourses(): void
+    public function publish(Course $course): void
     {
-        $user = Auth::user();
-        $query = Course::query()->where('instructor_id', $user->id)->latest();
-        if ($this->filterStatus) { $query->where('status', $this->filterStatus); }
-        if ($this->filterLevel) { $query->where('level', $this->filterLevel); }
-        if ($this->filterPro !== null) { $query->where('is_pro', $this->filterPro); }
-        $this->courses = $query->get();
-    }
-
-    public function publish(int $courseId): void
-    {
-        $course = Course::findOrFail($courseId);
         $this->authorizeAction($course);
         $course->update(['status' => 'published']);
-        $this->loadCourses();
         session()->flash('message', 'Course published.');
     }
 
-    public function unpublish(int $courseId): void
+    public function unpublish(Course $course): void
     {
-        $course = Course::findOrFail($courseId);
         $this->authorizeAction($course);
         $course->update(['status' => 'draft']);
-        $this->loadCourses();
         session()->flash('message', 'Course moved to draft.');
     }
 
@@ -73,17 +54,26 @@ class Index extends Component
         $this->confirmingDeleteId = null;
     }
 
-    public function deleteCourse(int $courseId): void
+    public function deleteCourse(Course $course): void
     {
-        $course = Course::findOrFail($courseId);
         $this->authorizeAction($course);
         $course->delete();
         $this->confirmingDeleteId = null;
-        $this->loadCourses();
         session()->flash('message', 'Course deleted.');
     }
-    public function render()
+    public function render(): View
     {
-        return view('livewire.instructor.course.index');
+        $user = Auth::user();
+        $courses = Course::query()
+            ->where('instructor_id', $user->id)
+            ->latest()
+            ->when($this->filterStatus, fn ($q) => $q->where('status', $this->filterStatus))
+            ->when($this->filterLevel, fn ($q) => $q->where('level', $this->filterLevel))
+            ->when($this->filterPro !== null, fn ($q) => $q->where('is_pro', $this->filterPro))
+            ->get();
+
+        return view('livewire.instructor.course.index', [
+            'courses' => $courses,
+        ]);
     }
 }

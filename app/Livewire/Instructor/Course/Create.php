@@ -2,7 +2,6 @@
 
 namespace App\Livewire\Instructor\Course;
 
-use App\Enums\Course\DiscountType;
 use App\Enums\Course\Levels;
 use App\Enums\Course\Status;
 use App\Models\Course;
@@ -10,15 +9,25 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\Enum;
 use Livewire\WithFileUploads;
 use Livewire\Component;
+use Illuminate\View\View;
 
 class Create extends Component
 {
     use WithFileUploads;
 
-    public $name, $description, $image, $duration, $level = 'beginner';
-    public $start_date, $end_date, $status = 'draft', $enrollment_limit, $requirements, $syllabus;
-    public $instructor_id;
-    public $is_pro = false;
+    public ?string $name = null;
+    public ?string $description = null;
+    public $image = null; // Livewire\Features\SupportFileUploads\TemporaryUploadedFile|null
+    public ?int $duration = null;
+    public string $level = 'beginner';
+    public ?string $start_date = null;
+    public ?string $end_date = null;
+    public string $status = 'draft';
+    public ?int $enrollment_limit = null;
+    public ?string $requirements = null;
+    public ?string $syllabus = null;
+    public int $instructor_id;
+    public bool $is_pro = false;
 
     public function mount(): void
     {
@@ -29,7 +38,7 @@ class Create extends Component
         $this->instructor_id = $user->id;
     }
 
-    public function saveCourse()
+    public function saveCourse(): \Illuminate\Http\RedirectResponse
     {
         $this->validate([
             'name' => 'required|string|max:255',
@@ -75,7 +84,7 @@ class Create extends Component
         return redirect()->route('instructor.courses.index');
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.instructor.course.create');
     }
