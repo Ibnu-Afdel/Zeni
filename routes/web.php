@@ -7,7 +7,7 @@ use App\Livewire\Subscriptions\ManualPayment;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Admin\ManageCourses;
 use App\Livewire\Admin\ManageUsers;
-use App\Livewire\Instructor\CourseManagement;
+use App\Livewire\Instructor\Course\Index as InstructorCourseIndex;
 use App\Livewire\User\Profile;
 use App\Livewire\User\Follow;
 use App\Livewire\Course\Chat;
@@ -19,12 +19,12 @@ use App\Livewire\Instructor\Dashboard as InstructorDashboard;
 use App\Livewire\Admin\Dashboard as AdminDashboard;
 use App\Livewire\Admin\InstructorApplicationForm;
 use App\Livewire\Admin\ManageSubscriptions;
-use App\Livewire\Course\Create;
-use App\Livewire\Course\Edit;
+use App\Livewire\Instructor\Course\Create as InstructorCourseCreate;
+use App\Livewire\Instructor\Course\Edit as InstructorCourseEdit;
 use App\Livewire\Course\Index;
 use App\Livewire\Course\Player;
 use App\Livewire\Course\Show;
-use App\Livewire\Instructor\ManageContent;
+use App\Livewire\Instructor\Course\ManageContent as InstructorCourseManageContent;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', HomePage::class)->name('home');
@@ -38,10 +38,10 @@ Route::get('/courses/{course}', Show::class)->middleware('auth')->name('course.d
 
 Route::middleware('instructor')->group(function () {
     Route::get('/instructor/dashboard', InstructorDashboard::class)->name('instructor.dashboard');
-    Route::get('/instructor/courses', CourseManagement::class)->name('instructor.course_management');
-    Route::get('/instructor/courses/create', Create::class)->name('courses.create');
-    Route::get('/instructor/courses/edit/{courseId}', Edit::class)->name('courses.edit');
-    Route::get('/instructor/courses/{course}/manage-content', ManageContent::class)->name('instructor.manage_content');
+    Route::get('/instructor/courses', InstructorCourseIndex::class)->name('instructor.courses.index');
+    Route::get('/instructor/courses/create', InstructorCourseCreate::class)->name('instructor.courses.create');
+    Route::get('/instructor/courses/edit/{course}', InstructorCourseEdit::class)->name('instructor.courses.edit');
+    Route::get('/instructor/courses/{course}/manage-content', InstructorCourseManageContent::class)->name('instructor.courses.manage_content');
 });
 
 
