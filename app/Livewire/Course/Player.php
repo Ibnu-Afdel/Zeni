@@ -21,6 +21,12 @@ class Player extends Component
     public function mount(Course $course, ?Lesson $lesson = null)
     {
         $this->course = $course;
+        // Guard: must be enrolled or course is free
+        if (!Auth::check() || (!Auth::user()->isEnrolledIn($course) && $course->is_pro)) {
+            session()->flash('error', 'You must enroll to access this course.');
+            redirect()->route('course.detail', ['course' => $course])->send();
+            return;
+        }
         $this->loadStructure();
         $this->currentLesson = $lesson ?? $this->findFirstLesson();
         $this->calculateNavigation();
