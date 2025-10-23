@@ -161,11 +161,12 @@ class ManageContent extends Component
         ]);
         $section = Section::find($this->addingLessonToSectionId);
         if ($section && $section->course_id == $this->course->id) {
+            $normalizedVideoUrl = $this->normalizeYouTubeUrl($this->newLessonVideoUrl);
             $maxOrder = $section->lessons()->max('order') ?? -1;
             $section->lessons()->create([
                 'title' => $this->newLessonTitle,
                 'content' => $this->newLessonContent,
-                'video_url' => $this->newLessonVideoUrl,
+                'video_url' => $normalizedVideoUrl,
                 'order' => $maxOrder + 1,
             ]);
             $this->loadSections();
@@ -193,10 +194,11 @@ class ManageContent extends Component
         ]);
         $lesson = Lesson::with('section')->find($this->editingLessonId);
         if ($lesson && $lesson->section->course_id == $this->course->id) {
+            $normalizedVideoUrl = $this->normalizeYouTubeUrl($this->editingLessonVideoUrl);
             $lesson->update([
                 'title' => $this->editingLessonTitle,
                 'content' => $this->editingLessonContent,
-                'video_url' => $this->editingLessonVideoUrl,
+                'video_url' => $normalizedVideoUrl,
             ]);
             $this->loadSections();
             session()->flash('message', 'Lesson updated successfully.');
@@ -240,5 +242,59 @@ class ManageContent extends Component
     public function cancelEditingLesson(): void
     {
         $this->resetEditingStates();
+    }
+
+    private function normalizeYouTubeUrl(?string $url): ?string
+    {
+        if ($url === null || trim($url) === '') {
+            return null;
+        }
+
+        $url = trim($url);
+        $parsed = parse_url($url);
+        if ($parsed === false) {
+            return $url; // leave as-is if unparsable
+        }
+
+        $host = strtolower($parsed['host'] ?? '');
+        $path = $parsed['path'] ?? '';
+        $query = $parsed['query'] ?? '';
+
+        $videoId = null;
+
+        // youtu.be/<id>
+        if (in_array($host, ['youtu.be'])) {
+            $videoId = ltrim($path, '/');
+        }
+
+        // youtube.com/watch?v=<id>
+        if ($videoId === null && str_contains($host, 'youtube.com')) {
+            // /watch?v=ID
+            if (str_starts_with($path, '/watch')) {
+                parse_str($query, $q);
+                if (!empty($q['v'])) {
+                    $videoId = $q['v'];
+                }
+            }
+
+            // /shorts/<id>
+            if ($videoId === null && str_starts_with($path, '/shorts/')) {
+                $videoId = substr($path, strlen('/shorts/'));
+            }
+
+            // /embed/<id>
+            if ($videoId === null && str_starts_with($path, '/embed/')) {
+                $videoId = substr($path, strlen('/embed/'));
+            }
+        }
+
+        if ($videoId) {
+            // strip any additional path segments or params from id
+            $videoId = preg_replace('~[^a-zA-Z0-9_-].*$~', '', $videoId) ?? $videoId;
+            return 'https://www.youtube-nocookie.com/embed/' . $videoId;
+        }
+
+        // Not a recognizable YouTube URL, keep original
+        return $url;
     }
 }
