@@ -4,7 +4,7 @@
   @if (!$enrollment_status)
       <h3 class="mb-3 text-lg font-semibold text-gray-800">Ready to start?</h3>
 
-      <livewire:course.course-enrollment :course-id="$course->id" />
+      <livewire:course.enrollment :course="$course" />
 
   @else
 
