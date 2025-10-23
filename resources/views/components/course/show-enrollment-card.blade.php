@@ -25,11 +25,11 @@
                               <i class="mr-2 fas fa-redo"></i> Continue Learning
                           @endif
                       </a>
+                      <a href="{{ route('course-chat', ['course' => $course]) }}"
+                          class="inline-flex items-center justify-center px-5 py-2 text-sm font-medium text-white transition duration-150 ease-in-out bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                          <i class="mr-2 fas fa-comments"></i> Chat
+                      </a>
                   @endif
-                  {{-- <a href="{{ route('course-chat', ['course' => $course->id]) }}"
-                      class="inline-flex items-center justify-center px-5 py-2 text-sm font-medium text-white transition duration-150 ease-in-out bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                      <i class="mr-2 fas fa-comments"></i> Chat
-                  </a> --}}
               @endauth
           </div>
       </div>

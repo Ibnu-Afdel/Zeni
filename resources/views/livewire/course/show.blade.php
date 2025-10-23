@@ -5,11 +5,11 @@
         <x-course.show-header :course="$course" :isInstructor="$isInstructor" />
         <x-course.show-detail-card :course="$course" />
         <x-course.show-requirements-card :course="$course" />
-        <x-course.show-syllabus-card :course="$course"  />
+        <livewire:course.components.lesson-list :course="$course" :enrolled="$enrollment_status" />
         <x-course.show-enrollment-card :course="$course" :enrollment_status="$enrollment_status" :continueLearningLesson="$continueLearningLesson" :isNewEnrollment="$isNewEnrollment"  />
 
         @if ($enrollment_status)
-            <x-course.show-review :course="$course" />
+            <livewire:course.components.review-section :course="$course" />
         @endif
 
     </div> 

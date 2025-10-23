@@ -44,6 +44,7 @@ class Chat extends Component
 
         $this->convo = $messages->map(function ($message) {
             return [
+                'user_id' => $message->user_id,
                 'username' => $message->user->name,
                 'message' => $message->message,
                 'created_at' => $message->created_at->toIso8601String(),
@@ -73,7 +74,16 @@ class Chat extends Component
             $savedMessage->created_at->toIso8601String()
         );
 
+        // Optimistically render my message so I see it immediately
+        $this->convo[] = [
+            'user_id' => Auth::id(),
+            'username' => Auth::user()->name,
+            'message' => $savedMessage->message,
+            'created_at' => $savedMessage->created_at->toIso8601String(),
+        ];
+
         $this->message = '';
+        $this->dispatch('message-sent');
     }
 
     #[On('echo:our-channel,MessageEvent')]
@@ -83,6 +93,7 @@ class Chat extends Component
     {
         if ($data['course_id'] == $this->course->id) {
             $this->convo[] = [
+                'user_id' => $data['user_id'] ?? null,
                 'username' => $data['username'],
                 'message' => $data['message'],
                 'created_at' => $data['createdAt'],

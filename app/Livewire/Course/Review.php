@@ -3,6 +3,7 @@
 namespace App\Livewire\Course;
 use App\Models\Review as ReviewModel;
 use App\Models\Enrollment as EnrollmentModel;
+use App\Models\Course;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -55,7 +56,15 @@ class Review extends Component
             ['rating' => $this->rating, 'review' => $this->reviewText]
         );
 
+        // Refresh local reviews
         $this->reviews = ReviewModel::where('course_id', $this->courseId)->get();
+
+        // Update course cached rating for listings/detail
+        $average = (float) ReviewModel::where('course_id', $this->courseId)->avg('rating');
+        Course::where('id', $this->courseId)->update(['rating' => round($average, 1)]);
+
+        // Notify parent components to refresh course data
+        $this->dispatch('course-rating-updated', courseId: $this->courseId, rating: round($average, 1));
 
         // Reset form
         $this->reset('rating', 'reviewText');
