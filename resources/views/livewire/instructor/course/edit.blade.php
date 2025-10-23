@@ -102,6 +102,3 @@
         <button type="submit" class="px-4 py-2 text-white bg-blue-500 rounded">Update Course</button>
     </form>
 </div>
-<div>
-    {{-- Success is as dangerous as failure. --}}
-</div>
