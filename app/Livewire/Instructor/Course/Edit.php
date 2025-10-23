@@ -8,20 +8,29 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Carbon;
 use Livewire\WithFileUploads;
 use Livewire\Component;
+use Illuminate\View\View;
 
 class Edit extends Component
 {
     use WithFileUploads;
 
-    public $name, $description, $image, $duration, $level;
-    public $start_date, $end_date, $status, $enrollment_limit, $requirements;
-    public $original_price;
+    public ?string $name = null;
+    public $image = null; // Livewire temp upload or null
+    public ?string $description = null;
+    public ?int $duration = null;
+    public $level = null; // enum|string
+    public ?string $start_date = null;
+    public ?string $end_date = null;
+    public $status = null; // enum|string
+    public ?int $enrollment_limit = null;
+    public ?string $requirements = null;
+    public $original_price = null;
     public ?string $existingImageUrl = null;
     public ?Course $course = null;
-    public $discount = false;
-    public $discount_type;
-    public $discount_value;
-    public $is_pro;
+    public bool $discount = false;
+    public $discount_type = null;
+    public $discount_value = null;
+    public bool $is_pro = false;
 
     public function mount(Course $course): void
     {
@@ -65,7 +74,7 @@ class Edit extends Component
         $this->existingImageUrl = $url;
     }
 
-    public function updateCourse()
+    public function updateCourse(): \Illuminate\Http\RedirectResponse
     {
         // Normalize enum-backed properties to strings in case Livewire received enum objects
         $this->level = $this->level instanceof \BackedEnum ? $this->level->value : (string) $this->level;
@@ -121,7 +130,7 @@ class Edit extends Component
         session()->flash('message', 'Course updated successfully.');
         return redirect()->route('instructor.courses.index');
     }
-    public function render()
+    public function render(): View
     {
         return view('livewire.instructor.course.edit');
     }

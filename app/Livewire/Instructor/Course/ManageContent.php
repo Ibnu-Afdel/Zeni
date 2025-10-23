@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
+use Illuminate\View\View;
 
 class ManageContent extends Component
 {
@@ -121,10 +122,10 @@ class ManageContent extends Component
         $this->resetEditingStates();
     }
 
-    public function confirmDeleteSection(Section $section)
+    public function confirmDeleteSection(Section $section): int
     {
         $this->titleToDeleted = $section->title;
-        return $this->confirmingDeleteSection =  $section->id;
+        return $this->confirmingDeleteSection = $section->id;
     }
 
     public function deleteSection(int $sectionId): void
@@ -205,10 +206,10 @@ class ManageContent extends Component
         $this->resetEditingStates();
     }
 
-    public function confirmDeleteLesson(Lesson $lesson)
+    public function confirmDeleteLesson(Lesson $lesson): int
     {
         $this->titleToDeleted = $lesson->title;
-        return $this->confirmingDeleteLesson =  $lesson->id;
+        return $this->confirmingDeleteLesson = $lesson->id;
     }
 
     public function deleteLesson(int $lessonId): void
@@ -226,8 +227,18 @@ class ManageContent extends Component
         $this->resetEditingStates();
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.instructor.course.manage-content');
+    }
+
+    public function cancelEditingSection(): void
+    {
+        $this->resetEditingStates();
+    }
+
+    public function cancelEditingLesson(): void
+    {
+        $this->resetEditingStates();
     }
 }
