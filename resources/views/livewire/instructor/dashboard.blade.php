@@ -6,7 +6,7 @@
     </h1>
 
     <div class="mb-10 text-center">
-        <a href="{{ route('instructor.course_management') }}"
+        <a href="{{ route('instructor.courses.index') }}"
            class="inline-flex items-center px-5 py-2 text-sm font-medium text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
             <i class="mr-2 fas fa-list-alt fa-fw"></i> 
             Course Management

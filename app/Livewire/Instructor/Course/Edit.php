@@ -1,40 +1,34 @@
 <?php
 
-namespace App\Livewire\Course;
+namespace App\Livewire\Instructor\Course;
 
 use App\Models\Course;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Livewire\Component;
 use Livewire\WithFileUploads;
+use Livewire\Component;
 
 class Edit extends Component
 {
     use WithFileUploads;
 
-    // public $courseId;
     public $name, $description, $image, $price, $duration, $level;
     public $start_date, $end_date, $status, $enrollment_limit, $requirements, $syllabus;
     public $original_price;
-    public ?Course $courseId = null;
-    public $discount = false; // Toggle for discount
-    public $discount_type; // 'percent' or 'amount'
-    public $discount_value; // Value for discount (numeric)
-    public $instructor_id; // Instructor's ID
+    public ?Course $course = null;
+    public $discount = false;
+    public $discount_type;
+    public $discount_value;
     public $is_pro;
 
-    public function mount($courseId)
+    public function mount(Course $course): void
     {
-        dd($courseId);
-        $this->courseId = $courseId;
-        $course = Course::findOrFail($courseId);
-
-        // Check if the logged-in user is the instructor of the course
-        if (Auth::id() !== $course->instructor_id) {
+        $user = Auth::user();
+        if (!$user || $user->role !== 'instructor' || $user->id !== $course->instructor_id) {
             abort(403, 'Unauthorized action.');
         }
 
-        // Load course data into properties
+        $this->course = $course;
         $this->name = $course->name;
         $this->description = $course->description;
         $this->price = $course->original_price;
@@ -47,23 +41,18 @@ class Edit extends Component
         $this->enrollment_limit = $course->enrollment_limit;
         $this->requirements = $course->requirements;
         $this->syllabus = $course->syllabus;
-        $this->discount = $course->discount;
+        $this->discount = (bool) $course->discount;
         $this->discount_type = $course->discount_type;
         $this->discount_value = $course->discount_value;
-        $this->instructor_id = $course->instructor_id;
         $this->is_pro = $course->is_pro;
     }
 
-    
-
     public function updateCourse()
     {
-        // Validation rules
-        $validatedData = $this->validate([
+        $this->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'image' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
-            // 'price' => 'required|numeric|min:0',
             'original_price' => 'required|numeric|min:0',
             'duration' => 'nullable|numeric|min:1',
             'level' => 'required|in:beginner,intermediate,advanced',
@@ -77,38 +66,30 @@ class Edit extends Component
             'discount_value' => 'nullable|numeric|min:0',
         ]);
 
-        // Find the course to update
-        $course = Course::findOrFail($this->courseId);
+        $course = $this->course;
 
-        // Handle image upload with local storage
         $imageData = $course->images;
         if ($this->image) {
-            // Delete the old image from local storage if it exists
             if (is_array($course->images) && isset($course->images['path'])) {
                 Storage::disk('public')->delete($course->images['path']);
             }
-            
-            // Upload the new image to local storage
             $path = $this->image->store('course-images', 'public');
             $imageData = ['path' => $path];
         }
 
-        // Calculate final price with discount if applicable
         $finalPrice = $this->price;
-
         if ($this->discount && $this->discount_type === 'percent') {
             $finalPrice = $this->price * ((100 - $this->discount_value) / 100);
         } elseif ($this->discount && $this->discount_type === 'amount') {
             $finalPrice = max(0, $this->price - $this->discount_value);
         }
 
-        // Update the course with validated data and final price
         $course->update([
             'name' => $this->name,
             'description' => $this->description,
             'images' => $imageData,
             'price' => $finalPrice,
-            'original_price' => $this->price, // Save the original price
+            'original_price' => $this->price,
             'duration' => $this->duration,
             'level' => $this->level,
             'start_date' => $this->start_date,
@@ -123,13 +104,11 @@ class Edit extends Component
             'is_pro' => $this->is_pro,
         ]);
 
-        // Redirect to the courses listing
         session()->flash('message', 'Course updated successfully.');
-        return redirect()->route('courses.index');
+        return redirect()->route('instructor.courses.index');
     }
-
     public function render()
     {
-        return view('livewire.course.edit');
+        return view('livewire.instructor.course.edit');
     }
 }

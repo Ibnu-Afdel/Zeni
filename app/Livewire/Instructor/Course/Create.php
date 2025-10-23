@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Course;
+namespace App\Livewire\Instructor\Course;
 
 use App\Enums\Course\DiscountType;
 use App\Enums\Course\Levels;
@@ -8,8 +8,8 @@ use App\Enums\Course\Status;
 use App\Models\Course;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\Enum;
-use Livewire\Component;
 use Livewire\WithFileUploads;
+use Livewire\Component;
 
 class Create extends Component
 {
@@ -23,18 +23,18 @@ class Create extends Component
     public $instructor_id;
     public $is_pro = false;
 
-    public function mount()
+    public function mount(): void
     {
-        if (Auth::user()->role === 'instructor') {
-            $this->instructor_id = Auth::id();
-        } else {
+        $user = Auth::user();
+        if (!$user || $user->role !== 'instructor') {
             abort(403, 'Unauthorized action.');
         }
+        $this->instructor_id = $user->id;
     }
 
     public function saveCourse()
     {
-        $validatedData = $this->validate([
+        $this->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'image' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
@@ -51,16 +51,7 @@ class Create extends Component
             'discount_value' => 'nullable|numeric|min:0',
         ]);
 
-        // Upload image to local storage if exists
-        // $imageData = null;
-        // if ($this->image) {
-        //     $path = $this->image->store('course-images', 'public');
-        //     $imageData = ['path' => $path];
-        // }
-
-
         $finalPrice = $this->price;
-
         if ($this->discount && $this->discount_type === 'percent') {
             $finalPrice = $this->price * ((100 - $this->discount_value) / 100);
         } elseif ($this->discount && $this->discount_type === 'amount') {
@@ -68,7 +59,6 @@ class Create extends Component
         }
 
         $user = Auth::user();
-
         if ($user->role !== 'instructor') {
             abort(403, 'You are not authorized to create courses.');
         }
@@ -86,12 +76,10 @@ class Create extends Component
             'status' => $this->status,
             'enrollment_limit' => $this->enrollment_limit,
             'requirements' => $this->requirements,
-            // 'syllabus' => $this->syllabus,
             'instructor_id' => $user->id,
             'discount' => $this->discount,
             'discount_type' => $this->discount_type,
             'discount_value' => $this->discount_value,
-            // 'rating' => $this->rating ?: null,
         ]);
 
         if ($this->image) {
@@ -100,12 +88,11 @@ class Create extends Component
                 ->toMediaCollection('images');
         }
 
-        return redirect()->route('courses.index');
+        return redirect()->route('instructor.courses.index');
     }
 
     public function render()
     {
-        $courses = Course::get();
-        return view('livewire.course.create');
+        return view('livewire.instructor.course.create');
     }
 }
