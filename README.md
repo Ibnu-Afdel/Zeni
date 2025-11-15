@@ -1,6 +1,6 @@
-# SSTutor - Online Learning Platform
+# Zeni - Online Learning Platform
 
-SSTutor is a comprehensive online learning platform built with Laravel, Livewire, and Filament that connects students with instructors through interactive courses.
+Zeni is a comprehensive online learning platform built with Laravel, Livewire, and Filament that connects students with instructors through interactive courses.
 
 ## Features
 
@@ -40,8 +40,8 @@ SSTutor is a comprehensive online learning platform built with Laravel, Livewire
 
 1. Clone the repository
    ```
-   git clone https://github.com/ibnu-afdel/sstutor.git
-   cd sstutor
+   git clone https://github.com/ibnu-afdel/zeni.git
+   cd zeni
    ```
 
 2. Install dependencies
@@ -107,4 +107,4 @@ The application is configured for Heroku deployment with the following:
 
 ## License
 
-The SSTutor platform is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+The Zeni platform is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
