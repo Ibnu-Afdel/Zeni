@@ -1,30 +1,55 @@
-<div class="bg-white border border-gray-200 rounded-lg shadow-md">
-    <div class="sticky top-0 z-10 flex items-center justify-between px-4 py-3 border-b bg-white/80 backdrop-blur">
-        <a href="{{ route('instructor.courses.index') }}" class="inline-flex items-center text-sm font-medium text-gray-700 transition hover:text-gray-900">
-            <i class="mr-2 fas fa-arrow-left"></i>
-            Back
-        </a>
-        <h2 class="text-lg font-semibold text-gray-800 sm:text-xl">Edit Course</h2>
-        <a href="{{ route('instructor.courses.index') }}" class="text-sm text-gray-500 hover:text-gray-700">Cancel</a>
-    </div>
-    <div class="p-4 sm:p-6 lg:p-8">
+@php
+    $fullWidth = true;
+@endphp
 
-    <form wire:submit.prevent="updateCourse" class="space-y-6">
-        @include('livewire.instructor.course._form-fields')
-        @if($existingImageUrl && !$image)
-            <div class="mt-4">
-                <span class="block mb-1 text-sm font-medium text-gray-700">Current Image</span>
-                <img src="{{ $existingImageUrl }}" alt="Current course image" class="object-cover w-auto h-16 rounded">
+<div class="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
+    <div class="px-4 py-8 md:py-12">
+        <div class="max-w-5xl mx-auto">
+            <!-- Header -->
+            <div class="mb-6">
+                <a href="{{ route('instructor.courses.index') }}" 
+                    class="inline-flex items-center text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-500 transition-colors mb-4">
+                    <i class="fa-solid fa-arrow-left mr-2"></i>
+                    Back to Courses
+                </a>
+                <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
+                    <i class="fa-solid fa-edit text-primary-600 dark:text-primary-500"></i>
+                    Edit Course
+                </h1>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">Update your course information</p>
             </div>
-        @endif
-        
-        <div class="pt-5 border-t border-gray-200">
-            <div class="flex justify-end">
-                <button type="submit" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded hover:bg-indigo-700">
-                    Update Course
-                </button>
-            </div>
+
+            <!-- Success Message -->
+            @if (session()->has('message'))
+                <div class="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg flex items-start gap-3">
+                    <i class="fa-solid fa-circle-check text-green-600 dark:text-green-400 mt-0.5"></i>
+                    <span class="text-sm text-green-700 dark:text-green-300">{{ session('message') }}</span>
+                </div>
+            @endif
+
+            <!-- Form -->
+            <form wire:submit.prevent="updateCourse">
+                @include('livewire.instructor.course._form-fields')
+
+                <!-- Form Actions -->
+                <div class="flex items-center justify-end gap-3 mt-8">
+                    <a href="{{ route('instructor.courses.index') }}" 
+                        class="px-6 py-3 text-sm font-semibold text-gray-700 dark:text-gray-300 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-lg transition-colors">
+                        Cancel
+                    </a>
+                    <button type="submit"
+                        class="inline-flex items-center px-6 py-3 text-sm font-semibold text-white bg-primary-600 hover:bg-primary-700 dark:bg-primary-600 dark:hover:bg-primary-700 rounded-lg transition-colors">
+                        <span wire:loading.remove wire:target="updateCourse">
+                            <i class="fa-solid fa-save mr-2"></i>
+                            Update Course
+                        </span>
+                        <span wire:loading wire:target="updateCourse">
+                            <i class="fa-solid fa-spinner fa-spin mr-2"></i>
+                            Updating...
+                        </span>
+                    </button>
+                </div>
+            </form>
         </div>
-    </form>
     </div>
 </div>
