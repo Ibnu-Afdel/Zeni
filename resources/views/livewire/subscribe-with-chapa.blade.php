@@ -1,188 +1,218 @@
-<div class="max-w-2xl p-6 mx-auto space-y-6 bg-white border border-gray-200 shadow-lg sm:p-8 rounded-2xl">
+<div class="min-h-screen px-4 py-8 md:py-12">
+    <div class="max-w-3xl mx-auto">
+        {{-- Back Navigation --}}
+        <div class="mb-6">
+            <a href="{{ route('user.profile', ['username' => auth()->user()->username]) }}"
+                class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                <i class="fa-solid fa-arrow-left mr-2"></i>
+                Back to Profile
+            </a>
+        </div>
 
-    {{-- Back Navigation --}}
-    <div class="mb-4">
-        <a href="{{ route('user.profile', ['username' => auth()->user()->username]) }}"
-            class="inline-flex items-center text-sm font-medium text-gray-500 transition-colors duration-150 hover:text-indigo-600">
-            <i class="mr-1 text-gray-400 fas fa-arrow-left fa-fw"></i>
-            Back to Profile
-        </a>
-    </div>
+        {{-- Page Header --}}
+        <div class="text-center mb-8">
+            <div class="flex justify-center mb-4">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-yellow-50 dark:bg-yellow-900/20 rounded-2xl">
+                    <i class="fa-solid fa-crown text-3xl text-yellow-600 dark:text-yellow-500"></i>
+                </div>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">
+                @if ($isProUser)
+                    {{ $showExtendOption ? 'Extend Your Pro Subscription' : 'Your Pro Subscription' }}
+                @else
+                    Become a Pro Member
+                @endif
+            </h1>
+            <p class="text-base text-gray-600 dark:text-gray-400">
+                Unlock all premium features and content
+            </p>
+        </div>
 
-    {{-- Page Title --}}
-    <h2 class="text-3xl font-bold text-gray-800">
-        <i class="mr-2 text-indigo-500 fas fa-shopping-cart fa-fw"></i>
-        @if ($isProUser)
-            {{ $showExtendOption ? 'Extend Your Pro Subscription' : 'Your Pro Subscription' }}
-        @else
-            Become a Pro Member
+        {{-- Flash Messages --}}
+        @if (session()->has('error'))
+            <div class="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl flex items-start gap-3">
+                <i class="fa-solid fa-exclamation-circle text-red-600 dark:text-red-400 mt-0.5"></i>
+                <span class="text-sm text-red-700 dark:text-red-300">{{ session('error') }}</span>
+            </div>
         @endif
-    </h2>
 
-    {{-- Flash Messages --}}
-    @if (session()->has('error'))
-        <div class="flex items-start p-4 space-x-3 text-sm text-red-800 border border-red-200 rounded-lg bg-red-50">
-            <i class="mt-1 text-red-500 fas fa-exclamation-circle fa-fw"></i>
-            <span>{{ session('error') }}</span>
-        </div>
-    @endif
-
-    @if (session()->has('info'))
-        <div class="flex items-start p-4 space-x-3 text-sm text-blue-800 border border-blue-200 rounded-lg bg-blue-50">
-            <i class="mt-1 text-blue-500 fas fa-info-circle fa-fw"></i>
-            <span>{{ session('info') }}</span>
-        </div>
-    @endif
-
-    @if (session()->has('success'))
-        <div class="flex items-start p-4 space-x-3 text-sm text-green-800 border border-green-200 rounded-lg bg-green-50">
-            <i class="mt-1 text-green-500 fas fa-check-circle fa-fw"></i>
-            <span>{{ session('success') }}</span>
-        </div>
-    @endif
-
-    {{-- Pro Status Display --}}
-    @if ($isProUser)
-        <div class="p-5 border border-green-200 rounded-lg bg-gradient-to-br from-green-50 to-white">
-            <div class="flex flex-col sm:flex-row sm:items-center">
-                <div class="flex items-center justify-center w-12 h-12 mb-3 text-xl text-white rounded-full shadow shrink-0 bg-gradient-to-tr from-green-500 to-emerald-600 sm:mb-0 sm:mr-4">
-                    <i class="fas fa-shield-alt"></i>
-                </div>
-                <div class="flex-grow text-center sm:text-left">
-                    <p class="text-lg font-semibold text-green-800">You are a Pro Member!</p>
-                    <p class="text-sm text-green-600">
-                        <i class="mr-1 text-green-400 fas fa-calendar-check fa-fw"></i>
-                        Expires on: <span class="font-medium">{{ $formattedExpiryDate }}</span>
-                        ({{ $daysRemaining }} days remaining)
-                    </p>
-                </div>
+        @if (session()->has('info'))
+            <div class="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl flex items-start gap-3">
+                <i class="fa-solid fa-info-circle text-blue-600 dark:text-blue-400 mt-0.5"></i>
+                <span class="text-sm text-blue-700 dark:text-blue-300">{{ session('info') }}</span>
             </div>
-            @if ($showExtendOption)
-                <p class="mt-3 text-sm text-center text-green-700 sm:text-left">
-                    You can extend your subscription below.
-                </p>
-            @endif
-        </div>
-    @endif
+        @endif
 
-    {{-- Pending Subscriptions Warning --}}
-    @if ($hasPendingSubscription)
-        <div class="p-4 text-sm border rounded-lg border-amber-300 bg-amber-50/80">
-            <div class="flex items-start space-x-3">
-                <i class="mt-1 text-amber-500 fas fa-exclamation-triangle fa-fw"></i>
-                <div>
-                    <p class="font-semibold text-amber-800">
-                        You have {{ $pendingSubscriptionCount }} pending payment{{ $pendingSubscriptionCount > 1 ? 's' : '' }}.
-                    </p>
-                    
-                    @if ($isProUser)
-                        <p class="mt-1 text-amber-700">These might be from previous attempts. You can safely remove them.</p>
-                        <button wire:click="cleanupPendingSubscriptions" wire:loading.attr="disabled"
-                            class="inline-flex items-center gap-1 px-3 py-1 mt-2 text-xs font-medium transition duration-150 ease-in-out border rounded-md text-amber-900 bg-amber-200 border-amber-300 hover:bg-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-400 disabled:opacity-50">
-                            <span wire:loading.remove wire:target="cleanupPendingSubscriptions">
-                                <i class="fas fa-broom fa-fw"></i> Clean up
+        @if (session()->has('success'))
+            <div class="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl flex items-start gap-3">
+                <i class="fa-solid fa-check-circle text-green-600 dark:text-green-400 mt-0.5"></i>
+                <span class="text-sm text-green-700 dark:text-green-300">{{ session('success') }}</span>
+            </div>
+        @endif
+
+        {{-- Pro Status Display --}}
+        @if ($isProUser)
+            <div class="mb-6 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 border border-green-200 dark:border-green-800 rounded-xl p-6">
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center justify-center w-14 h-14 bg-gradient-to-tr from-green-500 to-green-600 dark:from-green-600 dark:to-green-700 rounded-xl shadow-lg flex-shrink-0">
+                        <i class="fa-solid fa-shield-check text-2xl text-white"></i>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-lg font-semibold text-green-900 dark:text-green-100 mb-1">You are a Pro Member!</p>
+                        <p class="text-sm text-green-700 dark:text-green-300 flex items-center gap-2">
+                            <i class="fa-solid fa-calendar-check"></i>
+                            Expires on: <span class="font-medium">{{ $formattedExpiryDate }}</span>
+                            <span class="px-2 py-0.5 bg-green-200 dark:bg-green-800 text-green-800 dark:text-green-200 rounded-full text-xs font-semibold">
+                                {{ $daysRemaining }} days left
                             </span>
-                            <span wire:loading wire:target="cleanupPendingSubscriptions">
-                                <i class="fas fa-spinner fa-spin"></i> Cleaning...
-                            </span>
-                        </button>
-                    @else
-                        <p class="mt-1 text-amber-700">
-                            Continuing will cancel previous pending payments and create a new one.
                         </p>
-                    @endif
+                    </div>
+                </div>
+                @if ($showExtendOption)
+                    <p class="mt-3 text-sm text-green-700 dark:text-green-300 text-center">
+                        You can extend your subscription below.
+                    </p>
+                @endif
+            </div>
+        @endif
+
+        {{-- Pending Subscriptions Warning --}}
+        @if ($hasPendingSubscription)
+            <div class="mb-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl">
+                <div class="flex items-start gap-3">
+                    <i class="fa-solid fa-exclamation-triangle text-yellow-600 dark:text-yellow-400 mt-0.5"></i>
+                    <div class="flex-1">
+                        <p class="text-sm font-semibold text-yellow-900 dark:text-yellow-100 mb-1">
+                            You have {{ $pendingSubscriptionCount }} pending payment{{ $pendingSubscriptionCount > 1 ? 's' : '' }}.
+                        </p>
+                        
+                        @if ($isProUser)
+                            <p class="text-sm text-yellow-700 dark:text-yellow-300 mb-2">
+                                These might be from previous attempts. You can safely remove them.
+                            </p>
+                            <button wire:click="cleanupPendingSubscriptions" wire:loading.attr="disabled"
+                                class="inline-flex items-center px-4 py-2 text-xs font-semibold text-yellow-900 dark:text-yellow-100 bg-yellow-200 dark:bg-yellow-800 hover:bg-yellow-300 dark:hover:bg-yellow-700 border border-yellow-300 dark:border-yellow-700 rounded-lg transition-colors disabled:opacity-50">
+                                <span wire:loading.remove wire:target="cleanupPendingSubscriptions" class="flex items-center">
+                                    <i class="fa-solid fa-broom mr-2"></i>
+                                    Clean up
+                                </span>
+                                <span wire:loading wire:target="cleanupPendingSubscriptions" class="flex items-center">
+                                    <i class="fa-solid fa-spinner fa-spin mr-2"></i>
+                                    Cleaning...
+                                </span>
+                            </button>
+                        @else
+                            <p class="text-sm text-yellow-700 dark:text-yellow-300">
+                                Continuing will cancel previous pending payments and create a new one.
+                            </p>
+                        @endif
+                    </div>
                 </div>
             </div>
-        </div>
-    @endif
+        @endif
 
-    {{-- Subscription Form --}}
-    @if (!$isProUser || $showExtendOption)
-        <div class="pt-6 space-y-6 border-t border-gray-200">
-            
-            {{-- Plan Selection --}}
-            <div>
-                <label for="duration" class="block mb-2 text-sm font-medium text-gray-700">
-                    <i class="mr-1 text-gray-400 fas fa-calendar-alt fa-fw"></i>Choose Your Plan:
-                </label>
-                <select wire:model.live="duration" id="duration"
-                    class="block w-full px-4 py-3 pr-8 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500">
-                    <option value="30">Monthly - 199 ETB</option>
-                    <option value="365">Yearly - 1999 ETB (Save over 16%)</option>
-                </select>
-            </div>
+        {{-- Subscription Form --}}
+        @if (!$isProUser || $showExtendOption)
+            <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 md:p-8 space-y-6">
+                
+                {{-- Plan Selection --}}
+                <div>
+                    <label for="duration" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-calendar-alt text-primary-600 dark:text-primary-500"></i>
+                        Choose Your Plan
+                    </label>
+                    <select wire:model.live="duration" id="duration"
+                        class="block w-full px-4 py-3 text-gray-900 dark:text-white bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-500 focus:border-transparent transition-colors">
+                        <option value="30">Monthly - 199 ETB</option>
+                        <option value="365">Yearly - 1999 ETB (Save over 16%)</option>
+                    </select>
+                </div>
 
-            {{-- Plan Benefits --}}
-            <div class="p-5 border border-gray-200 rounded-lg bg-gray-50/70">
-                <h3 class="mb-3 font-semibold text-gray-800">
-                    <i class="mr-1 text-purple-500 fas fa-star fa-fw"></i> Plan Benefits:
-                </h3>
-                <ul class="space-y-2 text-sm text-gray-700">
-                    <li class="flex items-center">
-                        <i class="w-5 mr-2 text-green-500 fas fa-check-circle fa-fw"></i>
-                        Access to all premium courses
-                    </li>
-                    <li class="flex items-center">
-                        <i class="w-5 mr-2 text-green-500 fas fa-check-circle fa-fw"></i>
-                        Downloadable resources
-                    </li>
-                    <li class="flex items-center">
-                        <i class="w-5 mr-2 text-green-500 fas fa-check-circle fa-fw"></i>
-                        Priority support queue
-                    </li>
-                    <li class="flex items-center">
-                        <i class="w-5 mr-2 text-green-500 fas fa-check-circle fa-fw"></i>
-                        Ad-free experience
-                    </li>
-                </ul>
-            </div>
+                {{-- Plan Benefits --}}
+                <div class="bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-star text-yellow-500"></i>
+                        Pro Benefits
+                    </h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300">
+                            <i class="fa-solid fa-check-circle text-green-500 flex-shrink-0"></i>
+                            <span>Access to all premium courses</span>
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300">
+                            <i class="fa-solid fa-check-circle text-green-500 flex-shrink-0"></i>
+                            <span>Downloadable resources</span>
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300">
+                            <i class="fa-solid fa-check-circle text-green-500 flex-shrink-0"></i>
+                            <span>Priority support queue</span>
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300">
+                            <i class="fa-solid fa-check-circle text-green-500 flex-shrink-0"></i>
+                            <span>Ad-free experience</span>
+                        </li>
+                    </ul>
+                </div>
 
-            {{-- Price Display --}}
-            <div class="p-5 text-center border border-indigo-200 rounded-lg bg-indigo-50">
-                <p class="mb-1 text-sm font-medium text-indigo-700 uppercase">Total Amount</p>
-                <p class="text-3xl font-bold text-indigo-900">{{ $amount }} ETB</p>
-                <p class="mt-2 text-xs text-indigo-600">
-                    <i class="mr-1 fas fa-info-circle fa-fw"></i>
-                    {{ $duration == 30 ? 'Billed monthly' : 'Billed annually - Best Value!' }}
+                {{-- Price Display --}}
+                <div class="bg-gradient-to-br from-primary-50 to-primary-100 dark:from-primary-900/20 dark:to-primary-800/20 border border-primary-200 dark:border-primary-800 rounded-xl p-6 text-center">
+                    <p class="text-sm font-medium text-primary-700 dark:text-primary-300 uppercase tracking-wide mb-2">
+                        Total Amount
+                    </p>
+                    <p class="text-4xl md:text-5xl font-bold text-primary-900 dark:text-primary-100 mb-2">
+                        {{ $amount }} <span class="text-2xl">ETB</span>
+                    </p>
+                    <p class="text-sm text-primary-600 dark:text-primary-400 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-info-circle"></i>
+                        {{ $duration == 30 ? 'Billed monthly' : 'Billed annually - Best Value!' }}
+                    </p>
+                </div>
+
+                {{-- Payment Buttons --}}
+                <div class="space-y-3">
+                    <button wire:click="pay" wire:loading.attr="disabled" wire:target="pay"
+                        class="w-full flex items-center justify-center px-6 py-4 text-base font-semibold text-white bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 dark:from-primary-600 dark:to-primary-700 dark:hover:from-primary-700 dark:hover:to-primary-800 rounded-xl shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span wire:loading.remove wire:target="pay" class="flex items-center">
+                            <i class="fa-solid {{ $isProUser && $showExtendOption ? 'fa-calendar-plus' : 'fa-credit-card' }} mr-2"></i>
+                            {{ $isProUser && $showExtendOption ? 'Extend with Chapa' : 'Pay with Chapa' }}
+                        </span>
+                        <span wire:loading wire:target="pay" class="flex items-center">
+                            <i class="fa-solid fa-spinner fa-spin mr-2"></i>
+                            Processing...
+                        </span>
+                    </button>
+
+                    <a href="{{ route('subscribe.manual') }}"
+                        class="w-full flex items-center justify-center px-6 py-4 text-base font-semibold text-primary-700 dark:text-primary-300 bg-white dark:bg-gray-700 border-2 border-primary-300 dark:border-primary-700 hover:bg-primary-50 dark:hover:bg-gray-600 rounded-xl transition-colors">
+                        <i class="fa-solid fa-hand-holding-dollar mr-2"></i>
+                        Manual Payment
+                    </a>
+                </div>
+
+                <p class="text-xs text-center text-gray-500 dark:text-gray-400 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-lock"></i>
+                    Secure payment options available
                 </p>
             </div>
-
-            {{-- Payment Buttons --}}
-            <div class="space-y-4 sm:space-y-0 sm:flex sm:gap-4">
-                <button wire:click="pay" wire:loading.attr="disabled" wire:target="pay"
-                    class="flex items-center justify-center w-full px-6 py-3 text-base font-bold text-white transition duration-150 ease-in-out border border-transparent rounded-lg shadow-md bg-gradient-to-r from-purple-600 to-indigo-700 hover:from-purple-700 hover:to-indigo-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50">
-                    <span wire:loading.remove wire:target="pay">
-                        <i class="mr-2 fas {{ $isProUser && $showExtendOption ? 'fa-calendar-plus' : 'fa-credit-card' }} fa-fw"></i>
-                        {{ $isProUser && $showExtendOption ? 'Extend with Chapa' : 'Pay with Chapa' }}
-                    </span>
-                    <span wire:loading wire:target="pay">
-                        <i class="mr-2 fas fa-spinner fa-spin"></i>
-                        Processing...
-                    </span>
-                </button>
-
-                <a href="{{ route('subscribe.manual') }}"
-                    class="flex items-center justify-center w-full px-6 py-3 text-base font-bold text-indigo-700 transition duration-150 ease-in-out bg-white border border-indigo-300 rounded-lg shadow-sm hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    <i class="mr-2 fas fa-hand-holding-usd fa-fw"></i> Manual Payment
-                </a>
+        @else
+            {{-- Active Pro Status --}}
+            <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-8 text-center">
+                <div class="flex justify-center mb-4">
+                    <div class="inline-flex items-center justify-center w-20 h-20 bg-blue-100 dark:bg-blue-800 rounded-full">
+                        <i class="fa-solid fa-party-horn text-4xl text-blue-600 dark:text-blue-400"></i>
+                    </div>
+                </div>
+                <h3 class="text-xl font-semibold text-blue-900 dark:text-blue-100 mb-2">
+                    Your Pro Subscription is Active!
+                </h3>
+                <p class="text-base text-blue-700 dark:text-blue-300 mb-3">
+                    Enjoy your premium access! You have <span class="font-semibold">{{ $daysRemaining }}</span> days remaining.
+                </p>
+                <p class="text-sm text-blue-600 dark:text-blue-400">
+                    You'll be able to extend your plan closer to the expiry date.
+                </p>
             </div>
+        @endif
 
-            <p class="text-xs text-center text-gray-500">
-                <i class="mr-1 fas fa-lock fa-fw"></i> Secure payment options available.
-            </p>
-        </div>
-    @else
-        {{-- Active Pro Status --}}
-        <div class="p-6 text-center border border-blue-200 rounded-lg bg-blue-50">
-            <i class="mb-4 text-5xl text-blue-500 fas fa-party-popper"></i>
-            <h3 class="mb-2 text-lg font-semibold text-blue-800">Your Pro Subscription is Active!</h3>
-            <p class="mb-3 text-sm text-blue-700">
-                Enjoy your premium access! You have <span class="font-medium">{{ $daysRemaining }}</span> days remaining.
-            </p>
-            <p class="text-xs text-blue-600">
-                You'll be able to extend your plan closer to the expiry date.
-            </p>
-        </div>
-    @endif
-
+    </div>
 </div>
