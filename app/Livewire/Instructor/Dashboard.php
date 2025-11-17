@@ -14,6 +14,10 @@ class Dashboard extends Component
     public $publishedCourses;
     public $archivedCourses;
     public $enrolledStudents;
+    public $totalEnrollments;
+    public $premiumCourses;
+    public $recentCourses;
+    public $recentEnrollments;
 
     public function mount()
     {
@@ -31,16 +35,42 @@ class Dashboard extends Component
             $this->archivedCourses = Course::where('instructor_id', $instructorId)
                 ->where('status', 'archived')
                 ->count();
+            $this->premiumCourses = Course::where('instructor_id', $instructorId)
+                ->where('is_pro', true)
+                ->count();
 
             $this->enrolledStudents = Enrollment::whereHas('course', function ($query) use ($instructorId) {
                 $query->where('instructor_id', $instructorId);
             })->distinct('user_id')->count();
+            
+            $this->totalEnrollments = Enrollment::whereHas('course', function ($query) use ($instructorId) {
+                $query->where('instructor_id', $instructorId);
+            })->count();
+
+            // Get recent courses
+            $this->recentCourses = Course::where('instructor_id', $instructorId)
+                ->latest()
+                ->take(5)
+                ->get();
+
+            // Get recent enrollments
+            $this->recentEnrollments = Enrollment::whereHas('course', function ($query) use ($instructorId) {
+                $query->where('instructor_id', $instructorId);
+            })
+                ->with(['user', 'course'])
+                ->latest()
+                ->take(5)
+                ->get();
         } else {
             $this->totalCourses = 0;
             $this->inProgressCourses = 0;
             $this->publishedCourses = 0;
             $this->archivedCourses = 0;
             $this->enrolledStudents = 0;
+            $this->totalEnrollments = 0;
+            $this->premiumCourses = 0;
+            $this->recentCourses = collect();
+            $this->recentEnrollments = collect();
         }
     }
 
