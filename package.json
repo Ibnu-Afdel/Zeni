@@ -19,6 +19,6 @@
         "pusher-js": "^8.4.0-rc2",
         "sortablejs": "^1.15.6",
         "tailwindcss": "^3.4.11",
-        "vite": "^5.0"
+        "vite": "^7.1.12"
     }
 }
