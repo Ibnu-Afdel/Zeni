@@ -1,36 +1,38 @@
-<div
-    class="flex items-center justify-center min-h-screen px-4 py-12 bg-gradient-to-br from-indigo-100 via-white to-purple-100 sm:px-6 lg:px-8">
-    <div class="w-full max-w-md p-8 space-y-8 bg-white shadow-xl rounded-2xl">
+@php
+    $fullWidth = true;
+@endphp
 
-        <div>
-            <h2 class="mt-6 text-3xl font-extrabold text-center text-gray-900">
-                Sign in to your account
+<div class="flex items-center justify-center min-h-screen px-4 py-12 bg-white dark:bg-gray-900 transition-colors duration-300">
+    <div class="w-full max-w-md">
+        <!-- Logo/Icon -->
+        <div class="flex justify-center mb-6">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-primary-50 dark:bg-primary-900/20 rounded-2xl">
+                <i class="fa-solid fa-graduation-cap text-3xl text-primary-600 dark:text-primary-500"></i>
+            </div>
+        </div>
+
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                Welcome Back
             </h2>
-            <p class="mt-2 text-sm text-center text-gray-600">
-                Or
-                <a href="{{ route('register') }}" class="font-medium text-indigo-600 hover:text-indigo-500">
-                    create a new account
+            <p class="text-sm text-gray-600 dark:text-gray-400">
+                Don't have an account?
+                <a href="{{ route('register') }}" class="font-semibold text-primary-600 dark:text-primary-500 hover:text-primary-700 dark:hover:text-primary-400 transition-colors">
+                    Sign up
                 </a>
             </p>
         </div>
 
+        <!-- Card -->
+        <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 md:p-8 space-y-6">
 
-        <div class="space-y-4">
-            <p class="text-sm font-medium text-center text-gray-500">Sign in quickly with</p>
 
-            <div class="grid grid-cols-1 gap-3 sm:grid-cols-1">
-                {{-- <a href="/auth/github"
-                    class="inline-flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-white transition-colors duration-150 bg-gray-800 border border-transparent rounded-lg shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
-                    <svg class="w-5 h-5 mr-2 -ml-1" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path fill-rule="evenodd"
-                            d="M12 0C5.373 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.91 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.565 21.799 24 17.3 24 12c0-6.627-5.373-12-12-12z"
-                            clip-rule="evenodd" />
-                    </svg>
-                    GitHub
-                </a> --}}
+            <!-- Social Login -->
+            <div>
                 <a href="/auth/google"
-                    class="inline-flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    <svg class="w-5 h-5 mr-2 -ml-1" viewBox="0 0 48 48" aria-hidden="true">
+                    class="inline-flex items-center justify-center w-full px-4 py-3 text-sm font-semibold text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">
+                    <svg class="w-5 h-5 mr-2" viewBox="0 0 48 48" aria-hidden="true">
                         <path fill="#EA4335"
                             d="M24 9.5c3.48 0 6.48 1.21 8.83 3.49l6.46-6.46C35.01 2.83 29.88 0 24 0 14.88 0 7.04 5.58 2.79 13.5l7.85 6.09C12.09 13.19 17.53 9.5 24 9.5z">
                         </path>
@@ -45,87 +47,76 @@
                         </path>
                         <path fill="none" d="M0 0h48v48H0z"></path>
                     </svg>
-                    Google
+                    Continue with Google
                 </a>
-                {{-- LinkedIn Button Commented Out, get from register when needed --}}
             </div>
-        </div>
 
-        <div class="relative my-6">
-            <div class="absolute inset-0 flex items-center" aria-hidden="true">
-                <div class="w-full border-t border-gray-300"></div>
+            <!-- Divider -->
+            <div class="relative">
+                <div class="absolute inset-0 flex items-center">
+                    <div class="w-full border-t border-gray-300 dark:border-gray-600"></div>
+                </div>
+                <div class="relative flex justify-center text-sm">
+                    <span class="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">
+                        Or continue with email
+                    </span>
+                </div>
             </div>
-            <div class="relative flex justify-center">
-                <span class="px-2 text-sm text-gray-500 bg-white">
-                    OR
-                </span>
-            </div>
-        </div>
 
-        @if (session('status') || session('error'))
-            <div
-                class="{{ session('status') ? 'bg-green-50 border-green-300 text-green-700' : 'bg-red-50 border-red-300 text-red-700' }} p-3 rounded-md border flex items-center space-x-2 text-sm">
+            <!-- Alert Messages -->
+            @if (session('status') || session('error'))
+                <div class="{{ session('status') ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800 text-green-700 dark:text-green-300' : 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-700 dark:text-red-300' }} p-4 rounded-lg border flex items-start gap-3">
+                    <i class="fa-solid {{ session('error') ? 'fa-circle-exclamation' : 'fa-circle-check' }} mt-0.5"></i>
+                    <span class="text-sm">{{ session('status') ?? session('error') }}</span>
+                </div>
+            @endif
 
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
-                    aria-hidden="true">
-                    @if (session('error'))
-                        <path clip-rule="evenodd" fill-rule="evenodd"
-                            d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16ZM8.28 7.22a.75.75 0 0 0-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 1 0 1.06 1.06L10 11.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L11.06 10l1.72-1.72a.75.75 0 0 0-1.06-1.06L10 8.94 8.28 7.22Z" />
-                    @else
-                        <path clip-rule="evenodd" fill-rule="evenodd"
-                            d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z" />
-                    @endif
-                </svg>
-                <span>{{ session('status') ?? session('error') }}</span>
-            </div>
-        @endif
-
-
-        <form wire:submit.prevent="login" class="space-y-6">
-            <div>
-                <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
-                <div class="mt-1">
+            <!-- Login Form -->
+            <form wire:submit.prevent="login" class="space-y-5">
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Email address
+                    </label>
                     <input type="email" wire:model.lazy="email" id="email" name="email" required
-                        autocomplete="email"
-                        class="block w-full px-3 py-2 placeholder-gray-400 border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        autocomplete="email" placeholder="you@example.com"
+                        class="block w-full px-4 py-3 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-500 focus:border-transparent transition-colors">
+                    @error('email')
+                        <span class="mt-1.5 text-xs text-red-600 dark:text-red-400">{{ $message }}</span>
+                    @enderror
                 </div>
-                @error('email')
-                    <span class="mt-1 text-xs text-red-600">{{ $message }}</span>
-                @enderror
-            </div>
 
-            <div>
-                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                <div class="mt-1">
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Password
+                    </label>
                     <input type="password" wire:model.lazy="password" id="password" name="password" required
-                        autocomplete="current-password"
-                        class="block w-full px-3 py-2 placeholder-gray-400 border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        autocomplete="current-password" placeholder="••••••••"
+                        class="block w-full px-4 py-3 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-500 focus:border-transparent transition-colors">
+                    @error('password')
+                        <span class="mt-1.5 text-xs text-red-600 dark:text-red-400">{{ $message }}</span>
+                    @enderror
                 </div>
-                @error('password')
-                    <span class="mt-1 text-xs text-red-600">{{ $message }}</span>
-                @enderror
-            </div>
 
-            <div>
                 <button type="submit"
-                    class="flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    <span wire:loading.remove wire:target="login">
+                    class="w-full px-4 py-3 text-sm font-semibold text-white bg-primary-600 hover:bg-primary-700 dark:bg-primary-600 dark:hover:bg-primary-700 rounded-lg transition-colors flex items-center justify-center">
+                    <span wire:loading.remove wire:target="login" class="flex items-center">
+                        <i class="fa-solid fa-right-to-bracket mr-2"></i>
                         Sign In
                     </span>
-                    <span wire:loading wire:target="login">
-                        <svg class="w-5 h-5 mr-3 -ml-1 text-white animate-spin" xmlns="http://www.w3.org/2000/svg"
-                            fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                                stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor"
-                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                            </path>
-                        </svg>
+                    <span wire:loading wire:target="login" class="flex items-center">
+                        <i class="fa-solid fa-spinner fa-spin mr-2"></i>
                         Signing In...
                     </span>
                 </button>
-            </div>
-        </form>
+            </form>
+        </div>
 
+        <!-- Back to Home -->
+        <div class="text-center mt-6">
+            <a href="{{ route('home') }}" class="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-500 transition-colors">
+                <i class="fa-solid fa-arrow-left mr-1"></i>
+                Back to Home
+            </a>
+        </div>
     </div>
 </div>
