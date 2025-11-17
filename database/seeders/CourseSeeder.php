@@ -19,31 +19,38 @@ class CourseSeeder extends Seeder
         
         if ($instructors->isEmpty()) {
             // Create some instructors if none exist
+            $this->command->info('Creating additional instructors for courses...');
             $instructors = collect([
-                User::create([
-                    'name' => 'John Doe',
-                    'username' => 'john_instructor',
-                    'email' => 'john@instructor.com',
-                    'password' => bcrypt('password'),
-                    'role' => 'instructor',
-                    'status' => 'approved',
-                ]),
-                User::create([
-                    'name' => 'Jane Smith',
-                    'username' => 'jane_instructor',
-                    'email' => 'jane@instructor.com',
-                    'password' => bcrypt('password'),
-                    'role' => 'instructor',
-                    'status' => 'approved',
-                ]),
-                User::create([
-                    'name' => 'Mike Johnson',
-                    'username' => 'mike_instructor',
-                    'email' => 'mike@instructor.com',
-                    'password' => bcrypt('password'),
-                    'role' => 'instructor',
-                    'status' => 'approved',
-                ])
+                User::firstOrCreate(
+                    ['email' => 'john@zeni.com'],
+                    [
+                        'name' => 'John Doe',
+                        'username' => 'john_instructor',
+                        'password' => bcrypt('password'),
+                        'role' => 'instructor',
+                        'status' => 'approved',
+                    ]
+                ),
+                User::firstOrCreate(
+                    ['email' => 'jane@zeni.com'],
+                    [
+                        'name' => 'Jane Smith',
+                        'username' => 'jane_instructor',
+                        'password' => bcrypt('password'),
+                        'role' => 'instructor',
+                        'status' => 'approved',
+                    ]
+                ),
+                User::firstOrCreate(
+                    ['email' => 'mike@zeni.com'],
+                    [
+                        'name' => 'Mike Johnson',
+                        'username' => 'mike_instructor',
+                        'password' => bcrypt('password'),
+                        'role' => 'instructor',
+                        'status' => 'approved',
+                    ]
+                )
             ]);
         }
 
@@ -67,15 +74,10 @@ class CourseSeeder extends Seeder
             [
                 'name' => 'Complete JavaScript Fundamentals',
                 'description' => 'Master JavaScript from basics to advanced concepts. Learn variables, functions, objects, DOM manipulation, async programming, and modern ES6+ features.',
-                'price' => 199.99,
-                'original_price' => 299.99,
                 'level' => 'beginner',
                 'duration' => 480, // minutes
                 'status' => 'published',
                 'is_pro' => false,
-                'discount' => true,
-                'discount_type' => 'percent',
-                'discount_value' => 33,
                 'sections' => [
                     [
                         'title' => 'JavaScript Basics',
@@ -124,15 +126,10 @@ class CourseSeeder extends Seeder
             [
                 'name' => 'React.js Complete Guide',
                 'description' => 'Build modern web applications with React. Learn components, hooks, state management, and best practices for React development.',
-                'price' => 299.99,
-                'original_price' => 399.99,
                 'level' => 'intermediate',
                 'duration' => 720,
                 'status' => 'published',
                 'is_pro' => true,
-                'discount' => true,
-                'discount_type' => 'amount',
-                'discount_value' => 100,
                 'sections' => [
                     [
                         'title' => 'React Fundamentals',
@@ -175,8 +172,6 @@ class CourseSeeder extends Seeder
             [
                 'name' => 'Laravel 11 Mastery',
                 'description' => 'Master Laravel framework for building robust web applications. Learn routing, controllers, models, blade templates, and more.',
-                'price' => 249.99,
-                'original_price' => 349.99,
                 'level' => 'intermediate',
                 'duration' => 600,
                 'status' => 'published',
@@ -205,8 +200,6 @@ class CourseSeeder extends Seeder
             [
                 'name' => 'Python for Data Science',
                 'description' => 'Learn Python programming specifically for data analysis, visualization, and machine learning applications.',
-                'price' => 179.99,
-                'original_price' => 229.99,
                 'level' => 'beginner',
                 'duration' => 540,
                 'status' => 'published',
@@ -235,8 +228,6 @@ class CourseSeeder extends Seeder
             [
                 'name' => 'Node.js Backend Development',
                 'description' => 'Build scalable backend applications with Node.js. Learn Express, MongoDB, authentication, and API development.',
-                'price' => 219.99,
-                'original_price' => 299.99,
                 'level' => 'intermediate',
                 'duration' => 480,
                 'status' => 'published',
@@ -265,8 +256,6 @@ class CourseSeeder extends Seeder
             [
                 'name' => 'Advanced CSS & Sass',
                 'description' => 'Master advanced CSS techniques, Flexbox, Grid, animations, and Sass preprocessing for modern web design.',
-                'price' => 149.99,
-                'original_price' => 199.99,
                 'level' => 'intermediate',
                 'duration' => 360,
                 'status' => 'published',
@@ -295,8 +284,6 @@ class CourseSeeder extends Seeder
             [
                 'name' => 'TypeScript Fundamentals',
                 'description' => 'Learn TypeScript to write better JavaScript with static typing, interfaces, and advanced language features.',
-                'price' => 159.99,
-                'original_price' => 199.99,
                 'level' => 'intermediate',
                 'duration' => 300,
                 'status' => 'published',
@@ -325,8 +312,6 @@ class CourseSeeder extends Seeder
             [
                 'name' => 'Docker & DevOps Essentials',
                 'description' => 'Learn containerization with Docker, CI/CD pipelines, and essential DevOps practices for modern development.',
-                'price' => 269.99,
-                'original_price' => 349.99,
                 'level' => 'advanced',
                 'duration' => 420,
                 'status' => 'published',
@@ -355,8 +340,6 @@ class CourseSeeder extends Seeder
             [
                 'name' => 'Vue.js 3 Complete Course',
                 'description' => 'Build dynamic web applications with Vue.js 3. Learn composition API, components, routing, and state management.',
-                'price' => 189.99,
-                'original_price' => 249.99,
                 'level' => 'intermediate',
                 'duration' => 450,
                 'status' => 'published',
@@ -385,8 +368,6 @@ class CourseSeeder extends Seeder
             [
                 'name' => 'Machine Learning with Python',
                 'description' => 'Learn machine learning concepts and implement algorithms using Python, scikit-learn, and TensorFlow.',
-                'price' => 329.99,
-                'original_price' => 449.99,
                 'level' => 'advanced',
                 'duration' => 600,
                 'status' => 'published',
@@ -421,15 +402,15 @@ class CourseSeeder extends Seeder
             $course = Course::create([
                 'name' => $courseData['name'],
                 'description' => $courseData['description'],
-                'price' => $courseData['price'],
-                'original_price' => $courseData['original_price'] ?? $courseData['price'],
+                'price' => null,
+                'original_price' => null,
                 'level' => $courseData['level'],
                 'duration' => $courseData['duration'],
                 'status' => $courseData['status'],
                 'is_pro' => $courseData['is_pro'],
-                'discount' => $courseData['discount'] ?? false,
-                'discount_type' => $courseData['discount_type'] ?? null,
-                'discount_value' => $courseData['discount_value'] ?? null,
+                'discount' => false,
+                'discount_type' => null,
+                'discount_value' => null,
                 'instructor_id' => $instructor->id,
                 'requirements' => 'Basic computer skills and internet access',
                 'syllabus' => 'Complete course syllabus covering all essential topics with hands-on projects.',
@@ -459,10 +440,11 @@ class CourseSeeder extends Seeder
                 }
             }
 
-            echo "Created course: {$course->name} with " . $course->sections()->count() . " sections\n";
+            $this->command->line("✓ Created: {$course->name} (" . $course->sections()->count() . " sections, " . $course->lessons()->count() . " lessons)");
         }
 
-        echo "\nSeeded " . count($coursesData) . " tech courses with sections and lessons!\n";
+        $this->command->info('');
+        $this->command->info("✓ Seeded " . count($coursesData) . " courses with sections and lessons!");
     }
 }
 
