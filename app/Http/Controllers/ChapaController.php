@@ -70,7 +70,7 @@ class ChapaController extends Controller
             
             'customization' => [
                 'title' => 'Pro Subscription',
-                'description' => $duration == 30 ? 'SSTutor Monthly Pro Access' : 'SSTutor Yearly Pro Access',
+                'description' => $duration == 30 ? 'Zeni Monthly Pro Access' : 'Zeni Yearly Pro Access',
             ]
         ];
 

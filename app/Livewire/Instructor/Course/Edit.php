@@ -59,22 +59,11 @@ class Edit extends Component
         $this->discount_value = $course->discount_value;
         $this->is_pro = $course->is_pro;
 
-        // Build existing image preview URL
-        $url = null;
-        if (method_exists($course, 'getFirstMediaUrl')) {
-            $url = $course->getFirstMediaUrl('images') ?: null;
-        }
-        if (!$url && is_array($course->images ?? null) && isset($course->images['path'])) {
-            $url = $this->buildPublicUrlFromPath($course->images['path']);
-        } elseif (!$url && is_string($course->images ?? null) && $course->images !== '') {
-            $url = $this->buildPublicUrlFromPath($course->images);
-        } elseif (!$url && !empty($course->image)) {
-            $url = $this->buildPublicUrlFromPath($course->image);
-        }
-        $this->existingImageUrl = $url;
+        // Build existing image preview URL using Spatie Media Library
+        $this->existingImageUrl = $course->getFirstMediaUrl('image') ?: null;
     }
 
-    public function updateCourse(): \Illuminate\Http\RedirectResponse
+    public function updateCourse()
     {
         // Normalize enum-backed properties to strings in case Livewire received enum objects
         $this->level = $this->level instanceof \BackedEnum ? $this->level->value : (string) $this->level;
@@ -97,21 +86,10 @@ class Edit extends Component
 
         $course = $this->course;
 
-        $imageData = $course->images;
-        if ($this->image) {
-            if (is_array($course->images) && isset($course->images['path'])) {
-                Storage::disk('public')->delete($course->images['path']);
-            }
-            $path = $this->image->store('course-images', 'public');
-            $imageData = ['path' => $path];
-        }
-
-        // pricing removed: always free
-
+        // Update course data
         $course->update([
             'name' => $this->name,
             'description' => $this->description,
-            'images' => $imageData,
             'price' => 0,
             'original_price' => null,
             'duration' => $this->duration,
@@ -127,22 +105,22 @@ class Edit extends Component
             'is_pro' => $this->is_pro,
         ]);
 
+        // Handle image upload using Spatie Media Library (same as Create)
+        if ($this->image) {
+            // Clear existing images
+            $course->clearMediaCollection('image');
+            
+            // Add new image
+            $course->addMedia($this->image->getRealPath())
+                ->usingFileName($this->image->getClientOriginalName())
+                ->toMediaCollection('image');
+        }
+
         session()->flash('message', 'Course updated successfully.');
         return redirect()->route('instructor.courses.index');
     }
     public function render(): View
     {
         return view('livewire.instructor.course.edit');
-    }
-
-    private function buildPublicUrlFromPath(string $path): string
-    {
-        $trimmed = ltrim($path, '/');
-        if (str_starts_with($trimmed, 'http')) {
-            return $trimmed;
-        }
-        // If already under storage/, keep it, else prefix with storage/
-        $relative = str_starts_with($trimmed, 'storage/') ? $trimmed : 'storage/' . $trimmed;
-        return asset($relative);
     }
 }

@@ -31,7 +31,7 @@ Route::get('/', HomePage::class)->name('home');
 
 Route::get('/courses', Index::class)->name('courses.index');
 
-Route::get('/courses/{course}', Show::class)->middleware('auth')->name('course.detail');
+Route::get('/courses/{course}', Show::class)->name('course.detail');
 
 
 

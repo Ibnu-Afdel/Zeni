@@ -22,15 +22,17 @@ class Index extends Component
         }
     }
 
-    public function publish(Course $course): void
+    public function publish(int $courseId): void
     {
+        $course = Course::findOrFail($courseId);
         $this->authorizeAction($course);
         $course->update(['status' => 'published']);
         session()->flash('message', 'Course published.');
     }
 
-    public function unpublish(Course $course): void
+    public function unpublish(int $courseId): void
     {
+        $course = Course::findOrFail($courseId);
         $this->authorizeAction($course);
         $course->update(['status' => 'draft']);
         session()->flash('message', 'Course moved to draft.');
@@ -54,8 +56,9 @@ class Index extends Component
         $this->confirmingDeleteId = null;
     }
 
-    public function deleteCourse(Course $course): void
+    public function deleteCourse(int $courseId): void
     {
+        $course = Course::findOrFail($courseId);
         $this->authorizeAction($course);
         $course->delete();
         $this->confirmingDeleteId = null;

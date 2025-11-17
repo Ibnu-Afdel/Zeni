@@ -38,7 +38,7 @@ class Create extends Component
         $this->instructor_id = $user->id;
     }
 
-    public function saveCourse(): \Illuminate\Http\RedirectResponse
+    public function saveCourse()
     {
         $this->validate([
             'name' => 'required|string|max:255',
@@ -78,9 +78,10 @@ class Create extends Component
         if ($this->image) {
             $course->addMedia($this->image->getRealPath())
                 ->usingFileName($this->image->getClientOriginalName())
-                ->toMediaCollection('images');
+                ->toMediaCollection('image');
         }
 
+        session()->flash('message', 'Course created successfully.');
         return redirect()->route('instructor.courses.index');
     }
 

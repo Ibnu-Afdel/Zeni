@@ -18,8 +18,11 @@ class Index extends Component
 
     public function render()
     {
-        $courses = Course::paginate(10);
-       $is_pro = $this->isPro;
+        $courses = Course::withCount('lessons')
+            ->where('status', 'published')
+            ->latest()
+            ->paginate(10);
+        $is_pro = $this->isPro;
 
         return view('livewire.course.index', compact('courses', 'is_pro'));
     }
