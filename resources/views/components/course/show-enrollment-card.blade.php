@@ -1,37 +1,42 @@
-{{-- @props(['course', 'enrollment_status' => false, 'continueLearningLesson']) --}}
 @props(['course', 'enrollment_status', 'continueLearningLesson', 'isNewEnrollment'])
-<div class="p-6 mb-8 bg-white border border-gray-200 shadow-sm rounded-xl">
-  @if (!$enrollment_status)
-      <h3 class="mb-3 text-lg font-semibold text-gray-800">Ready to start?</h3>
 
-      <livewire:course.enrollment :course="$course" />
-
-  @else
-
-      <div class="flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between">
-          <div>
-              <p class="flex items-center gap-2 font-semibold text-green-700">
-                  <i class="fas fa-check-circle"></i> You are enrolled in this course.
-              </p>
-          </div>
-          <div class="flex flex-wrap gap-3 shrink-0">
-              @auth
-                  @if ($continueLearningLesson)
-                      <a href="{{ route('course-play', ['course' => $course, 'lesson' => $continueLearningLesson->id]) }}"
-                          class="inline-flex items-center justify-center px-5 py-2 text-sm font-medium text-white transition duration-150 ease-in-out bg-green-600 border border-transparent rounded-md shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                          @if ($isNewEnrollment)
-                              <i class="mr-2 fas fa-play"></i> Start Learning
-                          @else
-                              <i class="mr-2 fas fa-redo"></i> Continue Learning
-                          @endif
-                      </a>
-                      <a href="{{ route('course-chat', ['course' => $course]) }}"
-                          class="inline-flex items-center justify-center px-5 py-2 text-sm font-medium text-white transition duration-150 ease-in-out bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                          <i class="mr-2 fas fa-comments"></i> Chat
-                      </a>
-                  @endif
-              @endauth
-          </div>
-      </div>
-  @endif
+<div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 md:p-8">
+    @if (!$enrollment_status)
+        <div class="space-y-4">
+            <h3 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white">Ready to start?</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-400">Enroll now to access all course content</p>
+            <livewire:course.enrollment :course="$course" />
+        </div>
+    @else
+        <div class="flex flex-col md:flex-row items-start md:items-center md:justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="flex items-center justify-center w-10 h-10 bg-green-50 dark:bg-green-900/20 rounded-lg flex-shrink-0">
+                    <i class="fa-solid fa-check-circle text-green-600 dark:text-green-500"></i>
+                </div>
+                <div>
+                    <p class="text-sm font-semibold text-gray-900 dark:text-white">Enrolled</p>
+                    <p class="text-xs text-gray-600 dark:text-gray-400">You have access to this course</p>
+                </div>
+            </div>
+            
+            <div class="flex flex-wrap gap-3">
+                @auth
+                    @if ($continueLearningLesson)
+                        <a href="{{ route('course-play', ['course' => $course, 'lesson' => $continueLearningLesson->id]) }}"
+                            class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-semibold text-white bg-primary-600 hover:bg-primary-700 dark:bg-primary-600 dark:hover:bg-primary-700 rounded-lg transition-colors">
+                            @if ($isNewEnrollment)
+                                <i class="fa-solid fa-play mr-2"></i> Start Learning
+                            @else
+                                <i class="fa-solid fa-redo mr-2"></i> Continue Learning
+                            @endif
+                        </a>
+                        <a href="{{ route('course-chat', ['course' => $course]) }}"
+                            class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-semibold text-gray-700 dark:text-gray-300 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-lg transition-colors">
+                            <i class="fa-solid fa-comments mr-2"></i> Chat
+                        </a>
+                    @endif
+                @endauth
+            </div>
+        </div>
+    @endif
 </div>

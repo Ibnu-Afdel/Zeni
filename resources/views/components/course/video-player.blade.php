@@ -2,11 +2,19 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.css" />
     <style>
         :root {
-            --plyr-color-main: #4f46e5;
+            --plyr-color-main: #22c55e;
         }
 
         .plyr--video .plyr__controls {
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+        }
+
+        .plyr__control--overlaid {
+            background: rgba(34, 197, 94, 0.9);
+        }
+
+        .plyr__control--overlaid:hover {
+            background: rgba(34, 197, 94, 1);
         }
     </style>
 @endpush
@@ -22,7 +30,10 @@
                 if (playerInstance) {
                     playerInstance.destroy();
                 }
-                playerInstance = new Plyr(videoElement);
+                playerInstance = new Plyr(videoElement, {
+                    controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'captions', 'settings', 'pip', 'airplay', 'fullscreen'],
+                    settings: ['captions', 'quality', 'speed'],
+                });
             }
         }
 
@@ -38,7 +49,7 @@
     </script>
 @endpush
 
-<div class="mb-8 overflow-hidden bg-black rounded-lg shadow-lg">
+<div class="relative bg-black">
     @if ($currentLesson->video_url && filter_var($currentLesson->video_url, FILTER_VALIDATE_URL))
         @php
             $videoUrl = str_replace('youtube.com/embed', 'youtube-nocookie.com/embed', $currentLesson->video_url);
@@ -47,33 +58,41 @@
         @endphp
 
         @if ($isEmbed)
-            <div class="relative aspect-[16/9] w-full">
-                <div class="absolute z-10 text-xs pointer-events-none select-none text-white/50 sm:text-sm bottom-3 right-3">
+            <div class="relative aspect-video w-full">
+                <!-- Watermark -->
+                <div class="absolute z-10 bottom-16 right-4 text-xs sm:text-sm pointer-events-none select-none text-white/40 font-mono bg-black/20 px-2 py-1 rounded backdrop-blur-sm">
                     {{ Auth::user()->email }}
                 </div>
+                
+                <!-- Video Player -->
                 <div wire:key="player-{{ $currentLesson->id }}" class="w-full h-full">
-                    <iframe id="plyr-video" src="{{ $videoUrl }}" class="absolute top-0 left-0 w-full h-full" allowfullscreen
+                    <iframe id="plyr-video" 
+                        src="{{ $videoUrl }}" 
+                        class="absolute top-0 left-0 w-full h-full" 
+                        allowfullscreen
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                         frameborder="0">
                     </iframe>
                 </div>
             </div>
         @else
-            <div class="flex items-center justify-center text-center text-white bg-gray-800 aspect-[16/9]">
-                <div>
-                    <i class="mb-2 text-4xl text-red-400 fas fa-video-slash"></i>
-                    <p class="text-lg">Video cannot be embedded.</p>
-                    <p class="text-sm text-gray-300">Please use a valid YouTube or Vimeo embed URL.</p>
+            <!-- Invalid Video URL -->
+            <div class="flex items-center justify-center aspect-video bg-gray-900">
+                <div class="text-center px-4">
+                    <i class="fa-solid fa-video-slash text-5xl text-red-400 mb-4"></i>
+                    <h3 class="text-lg font-semibold text-white mb-2">Video Cannot Be Embedded</h3>
+                    <p class="text-sm text-gray-400">Please use a valid YouTube or Vimeo embed URL.</p>
                 </div>
             </div>
         @endif
     @else
-        <div class="flex items-center justify-center text-gray-500 bg-gray-200 rounded aspect-[16/9]">
-            <div class="text-center">
-                <i class="mb-2 text-4xl text-gray-400 fas fa-photo-video"></i>
-                <p>Video not available for this lesson.</p>
+        <!-- No Video Available -->
+        <div class="flex items-center justify-center aspect-video bg-gray-900">
+            <div class="text-center px-4">
+                <i class="fa-solid fa-photo-video text-5xl text-gray-600 mb-4"></i>
+                <h3 class="text-lg font-semibold text-white mb-2">No Video Available</h3>
+                <p class="text-sm text-gray-400">Video not available for this lesson.</p>
             </div>
         </div>
     @endif
 </div>
-

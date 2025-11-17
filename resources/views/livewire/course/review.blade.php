@@ -1,89 +1,127 @@
-<div>
+<div class="space-y-6">
     @auth
         @if ($isEnrolled)
-
-            <form wire:submit.prevent="submitReview" class="p-6 mb-8 bg-white border border-gray-200 rounded-lg shadow-sm">
-                <h3 class="mb-4 text-lg font-semibold text-gray-800">Leave Your Review</h3>
-
-                <div class="mb-4">
-                    <label class="block mb-1 text-sm font-medium text-gray-700">Your Rating</label>
-                    <div class="flex gap-1 mb-1"> 
-                        @for ($i = 1; $i <= 5; $i++)
-                            <button type="button" wire:click="setRating({{ $i }})" aria-label="Rate {{ $i }} out of 5"
-                                    class="p-0 text-xl transition-transform duration-100 ease-in-out transform border-none cursor-pointer focus:outline-none hover:scale-110 {{ $rating >= $i ? 'text-yellow-400' : 'text-gray-300 hover:text-gray-400' }}">
-                                <i class="fas fa-star"></i> 
-                            </button>
-                        @endfor
+            <!-- Review Form -->
+            <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 md:p-8">
+                <form wire:submit.prevent="submitReview">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="flex items-center justify-center w-10 h-10 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
+                            <i class="fa-solid fa-star text-yellow-500 dark:text-yellow-400"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Leave Your Review</h3>
                     </div>
-                    @error('rating') <span class="mt-1 text-sm text-red-600">{{ $message }}</span> @enderror
-                </div>
 
-                <div class="mb-5">
-                    <label for="reviewText" class="block mb-1 text-sm font-medium text-gray-700">Your Review</label>
-                    <textarea id="reviewText" wire:model.lazy="reviewText" rows="4" placeholder="Share your thoughts about the course..."
-                              class="block w-full p-3 mt-1 text-sm border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50"></textarea>
-                    @error('reviewText') <span class="mt-1 text-sm text-red-600">{{ $message }}</span> @enderror
-                </div>
+                    <div class="space-y-5">
+                        <!-- Rating -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                                Your Rating <span class="text-red-500">*</span>
+                            </label>
+                            <div class="flex gap-2">
+                                @for ($i = 1; $i <= 5; $i++)
+                                    <button type="button" wire:click="setRating({{ $i }})" 
+                                        aria-label="Rate {{ $i }} out of 5"
+                                        class="p-2 text-3xl transition-all duration-150 ease-in-out transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary-500 rounded-lg {{ $rating >= $i ? 'text-yellow-400 dark:text-yellow-500' : 'text-gray-300 dark:text-gray-600 hover:text-gray-400 dark:hover:text-gray-500' }}">
+                                        <i class="fa-solid fa-star"></i>
+                                    </button>
+                                @endfor
+                            </div>
+                            @error('rating')
+                                <span class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</span>
+                            @enderror
+                        </div>
 
-                <button type="submit" wire:loading.attr="disabled" wire:target="submitReview"
-                        class="inline-flex items-center justify-center px-5 py-2 text-sm font-medium text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50">
-                    <span wire:loading wire:target="submitReview" class="mr-2">
-                         <svg class="w-4 h-4 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                    </span>
-                    <span wire:loading.remove wire:target="submitReview">
-                         <i class="mr-1 fas fa-paper-plane fa-fw"></i>
-                    </span>
-                    Submit Review
-                </button>
-            </form>
+                        <!-- Review Text -->
+                        <div>
+                            <label for="reviewText" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Your Review <span class="text-red-500">*</span>
+                            </label>
+                            <textarea id="reviewText" wire:model.lazy="reviewText" rows="5" required
+                                placeholder="Share your thoughts about the course..."
+                                class="block w-full px-4 py-3 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-500 focus:border-transparent transition-colors"></textarea>
+                            @error('reviewText')
+                                <span class="mt-1.5 text-xs text-red-600 dark:text-red-400">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" wire:loading.attr="disabled" wire:target="submitReview"
+                            class="inline-flex items-center justify-center px-6 py-3 text-sm font-semibold text-white bg-primary-600 hover:bg-primary-700 dark:bg-primary-600 dark:hover:bg-primary-700 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                            <span wire:loading wire:target="submitReview" class="flex items-center">
+                                <i class="fa-solid fa-spinner fa-spin mr-2"></i>
+                                Submitting...
+                            </span>
+                            <span wire:loading.remove wire:target="submitReview" class="flex items-center">
+                                <i class="fa-solid fa-paper-plane mr-2"></i>
+                                Submit Review
+                            </span>
+                        </button>
+                    </div>
+                </form>
+            </div>
         @else
-
-            <div class="flex items-center gap-2 p-4 mb-6 text-sm text-blue-800 bg-blue-100 border border-blue-300 rounded-md shadow-sm" role="alert">
-                <i class="fas fa-info-circle fa-fw"></i>
-                <span>You must be enrolled in the course to submit a review.</span>
+            <!-- Not Enrolled Message -->
+            <div class="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg flex items-start gap-3">
+                <i class="fa-solid fa-info-circle text-blue-600 dark:text-blue-400 mt-0.5"></i>
+                <span class="text-sm text-blue-700 dark:text-blue-300">You must be enrolled in the course to submit a review.</span>
             </div>
         @endif
     @else
-    
-        <div class="flex items-center gap-2 p-4 mb-6 text-sm text-yellow-800 bg-yellow-100 border border-yellow-300 rounded-md shadow-sm" role="alert">
-            <i class="fas fa-sign-in-alt fa-fw"></i>
-            <span>You must be logged in to submit a review.</span>
+        <!-- Not Logged In Message -->
+        <div class="p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg flex items-start gap-3">
+            <i class="fa-solid fa-sign-in-alt text-yellow-600 dark:text-yellow-400 mt-0.5"></i>
+            <div class="flex-1">
+                <span class="text-sm text-yellow-700 dark:text-yellow-300">You must be logged in to submit a review.</span>
+                <a href="{{ route('login') }}" class="block text-sm font-semibold text-yellow-800 dark:text-yellow-200 hover:text-yellow-900 dark:hover:text-yellow-100 mt-1">
+                    Sign in now →
+                </a>
+            </div>
         </div>
     @endauth
 
-    <div class="mt-8">
-        <h3 class="pb-4 mb-4 text-xl font-semibold text-gray-800 border-b border-gray-200">
-            Student Reviews ({{ $reviews->count() }})
+    <!-- Reviews List -->
+    <div>
+        <h3 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center gap-3">
+            <i class="fa-solid fa-comments text-primary-600 dark:text-primary-500"></i>
+            Student Reviews 
+            <span class="text-sm font-normal text-gray-500 dark:text-gray-400">({{ $reviews->count() }})</span>
         </h3>
 
         @forelse($reviews as $review)
-            <div class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm" wire:key="review-{{ $review->id }}">
-                <div class="flex items-center justify-between mb-2">
-                    <div class="flex items-center gap-2">
-                         <i class="text-gray-400 far fa-user-circle fa-lg"></i> 
-                        <span class="font-semibold text-gray-800">{{ $review->user->name }}</span>
+            <div wire:key="review-{{ $review->id }}" 
+                class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 mb-4">
+                <div class="flex items-start justify-between gap-4 mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="flex items-center justify-center w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-full flex-shrink-0">
+                            <i class="fa-solid fa-user text-primary-600 dark:text-primary-500"></i>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-gray-900 dark:text-white">{{ $review->user->name }}</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">{{ $review->created_at->diffForHumans() }}</p>
+                        </div>
                     </div>
-                    <span class="text-xs text-gray-500">{{ $review->created_at->diffForHumans() }}</span> 
                 </div>
 
-                <div class="flex mb-2">
+                <!-- Rating Stars -->
+                <div class="flex items-center gap-1 mb-3">
                     @for ($i = 1; $i <= 5; $i++)
-                        <i class="fas fa-star fa-fw text-sm {{ $review->rating >= $i ? 'text-yellow-400' : 'text-gray-300' }}"></i>
+                        <i class="fa-solid fa-star text-sm {{ $review->rating >= $i ? 'text-yellow-400 dark:text-yellow-500' : 'text-gray-300 dark:text-gray-600' }}"></i>
                     @endfor
+                    <span class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">{{ $review->rating }}.0</span>
                 </div>
 
-                <p class="mt-1 text-sm leading-relaxed text-gray-700">
-                    {!! nl2br(e($review->review)) !!} {{-- Sanitize and format line breaks --}}
+                <!-- Review Text -->
+                <p class="text-sm leading-relaxed text-gray-700 dark:text-gray-300">
+                    {!! nl2br(e($review->review)) !!}
                 </p>
             </div>
         @empty
-            <div class="py-6 text-center text-gray-500 border border-gray-300 border-dashed rounded-lg bg-gray-50">
-                <i class="mb-2 text-3xl text-gray-400 far fa-comment-dots"></i>
-                <p class="text-sm">Be the first to review this course!</p>
+            <!-- Empty State -->
+            <div class="text-center py-12 bg-gray-50 dark:bg-gray-800/50 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-xl">
+                <i class="fa-solid fa-comment-dots text-5xl text-gray-300 dark:text-gray-600 mb-4"></i>
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">No Reviews Yet</h4>
+                <p class="text-sm text-gray-600 dark:text-gray-400">Be the first to review this course!</p>
             </div>
         @endforelse
-
-        {{-- Optional: Add pagination links if needed --}}
-        {{-- {{ $reviews->links() }} --}}
     </div>
 </div>

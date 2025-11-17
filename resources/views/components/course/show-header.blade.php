@@ -1,27 +1,32 @@
-<div class="flex flex-wrap items-center gap-3 mb-2">
-  <h1 class="text-3xl font-bold text-gray-900 md:text-4xl">{{ $course->name }}</h1>
-
-  @if ($course->is_pro)
-      <span
-          class="inline-flex items-center px-3 py-1 text-sm font-semibold text-yellow-800 bg-yellow-200 rounded-full">
-          <i class="mr-1.5 fas fa-star fa-fw text-yellow-600"></i>
-          Premium
-      </span>
-  @endif
+<!-- Back Button -->
+<div class="mb-4">
+    <a href="{{ route('courses.index') }}"
+        class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-500 transition-colors">
+        <i class="fa-solid fa-arrow-left mr-2"></i>
+        Back to Courses
+    </a>
 </div>
 
-<div class="flex flex-wrap items-center gap-4 mb-6">
-  <a href="{{ route('courses.index') }}"
-      class="inline-flex items-center px-4 py-2 font-medium text-gray-700 text-md ">
-      <i class="mr-2 text-gray-500 fas fa-arrow-left"></i>
-      Back
-  </a>
+<!-- Course Title -->
+<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+    <div class="flex flex-wrap items-center gap-3">
+        <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white">
+            {{ $course->name }}
+        </h1>
 
-  @if ($isInstructor)
-      <a href="{{ route('instructor.courses.manage_content', $course) }}"
-          class="inline-flex items-center gap-1 text-sm font-medium text-indigo-600 transition duration-150 ease-in-out hover:text-indigo-800">
-          <i class="fas fa-edit fa-fw"></i>
-          Manage Content
-      </a>
-  @endif
+        @if ($course->is_pro)
+            <span class="inline-flex items-center px-3 py-1 text-xs md:text-sm font-semibold bg-yellow-500 dark:bg-yellow-600 text-white rounded-lg">
+                <i class="fa-solid fa-crown mr-1.5"></i>
+                Premium
+            </span>
+        @endif
+    </div>
+
+    @if ($isInstructor)
+        <a href="{{ route('instructor.courses.manage_content', $course) }}"
+            class="inline-flex items-center justify-center px-4 py-2 text-sm font-semibold bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors">
+            <i class="fa-solid fa-edit mr-2"></i>
+            Manage Content
+        </a>
+    @endif
 </div>

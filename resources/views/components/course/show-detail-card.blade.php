@@ -1,73 +1,117 @@
+<!-- Course Image -->
 @if ($course->getFirstMediaUrl('image'))
-<div class="mb-8 overflow-hidden rounded-lg shadow-lg">
+<div class="mb-6 md:mb-8 overflow-hidden rounded-xl">
     <img src="{{ $course->getFirstMediaUrl('image') }}" alt="{{ $course->name }}"
-        class="object-cover w-full h-64 md:h-80">
+        class="object-cover w-full h-48 md:h-64 lg:h-80">
+</div>
+@else
+<div class="mb-6 md:mb-8 bg-gradient-to-br from-primary-50 to-primary-100 dark:from-primary-900/20 dark:to-primary-800/20 rounded-xl h-48 md:h-64 flex items-center justify-center">
+    <i class="fa-solid fa-book-open text-5xl md:text-6xl text-primary-300 dark:text-primary-700"></i>
 </div>
 @endif
 
+<!-- Course Description -->
+<div class="mb-6 md:mb-8">
+    <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-4">About This Course</h2>
+    <p class="text-base md:text-lg leading-relaxed text-gray-600 dark:text-gray-400">{{ $course->description }}</p>
+</div>
 
-<p class="mb-8 text-lg leading-relaxed text-gray-700">{{ $course->description }}</p>
+<!-- Course Details Card -->
+<div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 md:p-8">
+    <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-6">Course Details</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-<div class="p-6 mb-8 bg-white border border-gray-200 shadow-sm rounded-xl">
-  <h2 class="mb-4 text-xl font-semibold text-gray-800">Course Details</h2>
-  <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <div class="space-y-4">
+            @if ($course->rating)
+            <div class="flex items-center gap-3">
+                <div class="flex items-center justify-center w-10 h-10 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg flex-shrink-0">
+                    <i class="fa-solid fa-star text-yellow-500 dark:text-yellow-400"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <span class="block text-xs text-gray-500 dark:text-gray-400">Rating</span>
+                    <span class="block text-sm font-medium text-gray-900 dark:text-white">
+                        {{ number_format($course->rating, 1) }}/5
+                    </span>
+                </div>
+            </div>
+            @endif
 
-      <div class="space-y-4">
-          <div class="flex items-center gap-3 text-sm">
-              <i class="w-5 text-center text-yellow-500 fas fa-star fa-fw"></i>
-              <span class="font-medium text-gray-600">Rating:</span>
-              <span class="text-gray-800">
-                  @if ($course->rating)
-                      {{ number_format($course->rating, 1) }}/5
-                  @else
-                      Not Rated Yet
-                  @endif
-              </span>
-          </div>
-          {{-- <div class="flex items-center gap-3 text-sm">
-              <i class="w-5 text-center text-green-600 fas fa-dollar-sign fa-fw"></i>
-              <span class="font-medium text-gray-600">Price:</span>
+            <div class="flex items-center gap-3">
+                <div class="flex items-center justify-center w-10 h-10 bg-primary-50 dark:bg-primary-900/20 rounded-lg flex-shrink-0">
+                    <i class="fa-solid fa-clock text-primary-600 dark:text-primary-500"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <span class="block text-xs text-gray-500 dark:text-gray-400">Duration</span>
+                    <span class="block text-sm font-medium text-gray-900 dark:text-white">
+                        {{ $course->duration }} minutes
+                    </span>
+                </div>
+            </div>
 
-              <span class="text-gray-800">${{ number_format($course->price, 2) }}</span>
-          </div> --}}
-          <div class="flex items-center gap-3 text-sm">
-              <i class="w-5 text-center text-blue-600 far fa-clock fa-fw"></i>
-              <span class="font-medium text-gray-600">Duration:</span>
-              <span class="text-gray-800">{{ $course->duration }} hours</span>
-          </div>
-          <div class="flex items-center gap-3 text-sm">
-              <i class="w-5 text-center text-purple-600 far fa-calendar-alt fa-fw"></i>
-              <span class="font-medium text-gray-600">Start Date:</span>
-              <span
-                  class="text-gray-800">{{ \Carbon\Carbon::parse($course->start_date)->format('M d, Y') }}</span>
-          </div>
-          <div class="flex items-center gap-3 text-sm">
-              <i class="w-5 text-center text-purple-600 far fa-calendar-check fa-fw"></i>
-              <span class="font-medium text-gray-600">End Date:</span>
-              <span
-                  class="text-gray-800">{{ \Carbon\Carbon::parse($course->end_date)->format('M d, Y') }}</span>
-          </div>
-      </div>
+            <div class="flex items-center gap-3">
+                <div class="flex items-center justify-center w-10 h-10 bg-purple-50 dark:bg-purple-900/20 rounded-lg flex-shrink-0">
+                    <i class="fa-solid fa-calendar text-purple-600 dark:text-purple-500"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <span class="block text-xs text-gray-500 dark:text-gray-400">Start Date</span>
+                    <span class="block text-sm font-medium text-gray-900 dark:text-white">
+                        {{ \Carbon\Carbon::parse($course->start_date)->format('M d, Y') }}
+                    </span>
+                </div>
+            </div>
 
-      <div class="space-y-4">
-          <div class="flex items-center gap-3 text-sm">
-              <i class="w-5 text-center text-teal-600 fas fa-graduation-cap fa-fw"></i>
-              <span class="font-medium text-gray-600">Level:</span>
-              <span class="text-gray-800">{{ ucfirst($course->level->value) }}</span>
-          </div>
-          <div class="flex items-center gap-3 text-sm">
-              <i class="w-5 text-center text-orange-600 fas fa-users fa-fw"></i>
-              <span class="font-medium text-gray-600">Enrollment Limit:</span>
-              <span class="text-gray-800">{{ $course->enrollment_limit ?? 'N/A' }}</span>
-          </div>
-          <div class="flex items-center gap-3 text-sm">
-              <i class="w-5 text-center text-indigo-600 fas fa-chalkboard-teacher fa-fw"></i>
-              <span class="font-medium text-gray-600">Instructor:</span>
-              <a href="{{ route('user.profile', ['username' => $course->instructor->username]) }}">
-                  <span
-                      class="p-2 font-bold text-blue-800 rounded-lg bg-blue-50 hover:bg-blue-100">{{ $course->instructor->name }}</span>
-              </a>
-          </div>
-      </div>
-  </div>
+            <div class="flex items-center gap-3">
+                <div class="flex items-center justify-center w-10 h-10 bg-purple-50 dark:bg-purple-900/20 rounded-lg flex-shrink-0">
+                    <i class="fa-solid fa-calendar-check text-purple-600 dark:text-purple-500"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <span class="block text-xs text-gray-500 dark:text-gray-400">End Date</span>
+                    <span class="block text-sm font-medium text-gray-900 dark:text-white">
+                        {{ \Carbon\Carbon::parse($course->end_date)->format('M d, Y') }}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="space-y-4">
+            <div class="flex items-center gap-3">
+                <div class="flex items-center justify-center w-10 h-10 bg-teal-50 dark:bg-teal-900/20 rounded-lg flex-shrink-0">
+                    <i class="fa-solid fa-signal text-teal-600 dark:text-teal-500"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <span class="block text-xs text-gray-500 dark:text-gray-400">Level</span>
+                    <span class="block text-sm font-medium text-gray-900 dark:text-white capitalize">
+                        {{ ucfirst($course->level->value) }}
+                    </span>
+                </div>
+            </div>
+
+            @if ($course->enrollment_limit)
+            <div class="flex items-center gap-3">
+                <div class="flex items-center justify-center w-10 h-10 bg-orange-50 dark:bg-orange-900/20 rounded-lg flex-shrink-0">
+                    <i class="fa-solid fa-users text-orange-600 dark:text-orange-500"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <span class="block text-xs text-gray-500 dark:text-gray-400">Enrollment Limit</span>
+                    <span class="block text-sm font-medium text-gray-900 dark:text-white">
+                        {{ $course->enrollment_limit }}
+                    </span>
+                </div>
+            </div>
+            @endif
+
+            <div class="flex items-center gap-3">
+                <div class="flex items-center justify-center w-10 h-10 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg flex-shrink-0">
+                    <i class="fa-solid fa-chalkboard-user text-indigo-600 dark:text-indigo-500"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <span class="block text-xs text-gray-500 dark:text-gray-400">Instructor</span>
+                    <a href="{{ route('user.profile', ['username' => $course->instructor->username]) }}"
+                        class="block text-sm font-semibold text-primary-600 dark:text-primary-500 hover:text-primary-700 dark:hover:text-primary-400 transition-colors">
+                        {{ $course->instructor->name }}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
