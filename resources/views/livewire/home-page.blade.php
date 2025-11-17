@@ -123,10 +123,10 @@
                         <i class="fa-solid fa-users text-2xl md:text-3xl text-primary-600 dark:text-primary-500"></i>
                     </div>
                     <div class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-1">
-                        1K+
+                        50+
                     </div>
                     <div class="text-xs md:text-sm text-gray-600 dark:text-gray-400">
-                        Active Students
+                        Students
                     </div>
                 </div>
 
@@ -136,7 +136,7 @@
                         <i class="fa-solid fa-book-open text-2xl md:text-3xl text-primary-600 dark:text-primary-500"></i>
                     </div>
                     <div class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-1">
-                        50+
+                        5+
                     </div>
                     <div class="text-xs md:text-sm text-gray-600 dark:text-gray-400">
                         Courses
@@ -149,7 +149,7 @@
                         <i class="fa-solid fa-user-tie text-2xl md:text-3xl text-primary-600 dark:text-primary-500"></i>
                     </div>
                     <div class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-1">
-                        20+
+                        2
                     </div>
                     <div class="text-xs md:text-sm text-gray-600 dark:text-gray-400">
                         Expert Instructors
@@ -162,7 +162,7 @@
                         <i class="fa-solid fa-star text-2xl md:text-3xl text-primary-600 dark:text-primary-500"></i>
                     </div>
                     <div class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-1">
-                        4.8
+                        5
                     </div>
                     <div class="text-xs md:text-sm text-gray-600 dark:text-gray-400">
                         Average Rating
